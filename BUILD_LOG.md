@@ -580,3 +580,58 @@ Empat perubahan Dham dalam satu publish (version 9). Commit game `b77d435`
   Verifikasi: games API mengembalikan nama asli "Tempat SHAMSIE665",
   creator SHAMSIE665, updated 20:23:12 WIB; playability GuestProhibited
   (publik, normal) — experience tetap Public.
+
+## Revisi 7 — HUD diperkecil, teks + kontrol tidak menutup layar (15 Nov 2026, ~20:40 WIB)
+
+Dham kirim screenshot ronde (20:26 WIB): panel status kiri menutupi tengah-kiri
+layar, bar stamina membentang hampir selebar layar, tombol "TAHAN: BACA DOA"
+ungu raksasa di kanan, teks RONDE/PERAN sangat besar, label overhead 3D di
+tengah bertumpuk.
+
+### Akar masalah (diukur dari screenshot 2048x984)
+- GUI di HP Dham ter-render **~2,48x ukuran kode**: tombol 190x84 (kode)
+  ter-render 473x208 px; bar doa 320x24 ter-render 802x58 px; teks TextSize 26
+  ter-render ~58 px. Viewport logis GUI hanya ~753x336 (bukan 2048x984).
+  Model render terukur: `render = 2,48 x kode + (83, 147)`.
+- Jadi semua ukuran kode harus dibagi ~2,5x. Verifikasi "1 kode px = 1 layar px"
+  di revisi-revisi sebelumnya SALAH di HP ini — jangan dipakai lagi.
+- Teks putih "DOA" yang menumpuk di tengah adalah **name tag bawaan Roblox**,
+  bukan label kita. Label 3D "PEMABACA DOA" di kode sudah benar ejaannya
+  ("PEMABACA" = pembaca doa); tidak ada typo yang diperbaiki.
+
+### Yang diubah (HANYA ukuran/layout HUD + label 3D — gameplay TIDAK diubah)
+- **Timer** 260x44 TS 30 → **95x16 TS 14** (kiri atas, di bawah tombol menu Roblox).
+- **Peran** 280x40 TS 26 → **100x14 TS 13** (kanan atas).
+- **Panel status + escape** 480x28 TS 20 → **200x10 TS 11** (kiri, di bawah timer).
+- **Bar doa** 320x24 → **200x5** (tipis); label DOA TS 22 → **12**.
+- **Bar stamina** 320x16 → **200x4** (tipis); label stamina TS 18 → **11**.
+- **Tombol BACA DOA** 190x84 TS 24 → **72x28 TS 13** (kanan bawah, DI ATAS
+  tombol lompat CoreGui yang terukur di x 1731-1903, y 760-932 — tidak bertabrakan).
+- **Baris doa + petunjuk** TS 20/18 → **11/10**, berbagi SATU slot di tengah
+  bawah (petunjuk tampil saat tidak membaca, baris doa tampil saat membaca).
+- **Label overhead 3D** 120x24 TS 16 → **76x16 TS 10**; StudsOffset per peran
+  direnggangkan (2.8 / 3.5 / 4.2); **name tag bawaan Roblox disembunyikan**
+  (`Humanoid.DisplayDistanceType = None` untuk bot + pemain) supaya hanya
+  label peran berwarna yang tampil.
+- **Panel CARA MAIN (lobby)** 480x490 → **280x220** (isi dan teks aturan TETAP
+  SAMA, hanya diperkecil — sebelumnya panel meluber keluar layar, tombol MULAI
+  terpotong di bawah). **Layar akhir** 480x210 → **280x84**, teks diperkecil.
+- Stamina Penahan (5 dtk tahan / 3 dtk istirahat), ronde 90 detik, suara,
+  suasana senja, rumah 3 ruangan: TIDAK diubah. Experience tetap Public.
+
+### Verifikasi numerik (model render 2,48x, layar 2048x984)
+- Semua elemen HUD di dalam layar; **0 tumpang tindih** di 5 state (lobby,
+  ronde Pembaca Doa diam/membaca, ronde non-Pembaca, akhir) — kotak + rect teks.
+- Luas tertutup HUD saat ronde: **~7,9% layar**. Klaster atas y 157-276
+  (12,1% tinggi), tombol BACA DOA y 653-722 (tepi kanan saja), klaster bawah
+  y 812-926 (11,6%). **Tengah layar (y 277-652, seluruh lebar) BERSIH** dari HUD.
+- Cek keseimbangan blok Luau: delta buka−tutup client +4 dan server +9 SAMA
+  seperti HEAD v9 (artefak checker, bukan ketidakseimbangan baru).
+- `./bin/rojo build` (Rojo 7.7.1) — **SUKSES**, `game.rbxl` **28.277 byte**.
+- `main.ts`/`check`/`submit` TIDAK dijalankan (menunggu 3 screenshot baru dari
+  game revisi 7 + submit ulang sebelum deadline 16 Nov 01:00 WIB).
+- **Publish — SELESAI 15 Nov ~20:40 WIB:** `roblox.py publish 9874149559
+  93903442181463 game.rbxl` → **HTTP 200, versionNumber 10** (sebelumnya 9).
+  Verifikasi: games API mengembalikan nama asli "Tempat SHAMSIE665",
+  creator SHAMSIE665, updated 20:40:05 WIB; playability GuestProhibited
+  (publik, normal) — experience tetap Public.
