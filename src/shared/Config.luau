@@ -1,29 +1,49 @@
--- Coin Rush Dodge: shared tuning in one place.
+-- Kesurupan — Usir Iblis: shared tuning in one place.
 -- Server and client both read these numbers, so a balance change is a one-line edit.
 
 local Config = {
 	-- A round lasts 60 seconds; the lobby between rounds lasts 10 seconds;
-	-- the end screen stays up for 5 seconds.
+	-- the end screen stays up for 6 seconds.
 	ROUND_LENGTH = 60,
 	INTERMISSION_LENGTH = 10,
-	ENDING_LENGTH = 5,
+	ENDING_LENGTH = 6,
 
-	-- The arena floor spans -60..60 on X and Z; coins and balls spawn inside
-	-- this smaller half-extent so they never land inside a wall.
-	ARENA_HALF = 46,
+	-- The arena floor spans -30..30 on X and Z; bots and spawns stay inside
+	-- this smaller half-extent so they never clip into a wall.
+	ARENA_HALF = 26,
 
-	-- How many coins are on the field at once, and what one coin is worth.
-	COIN_TARGET = 12,
-	COIN_VALUE = 1,
+	-- Prayer progress: fills only while the reader chants close to the
+	-- possessed AND the possessed is held. 100 = demon expelled.
+	-- At 3.5%/s, about 29 s of good chanting wins a 60 s round.
+	PRAYER_RATE_HELD = 3.5, -- % per second while chanting, close, held
+	PRAYER_DECAY = 1.5, -- % per second lost when not chanting / too far
+	CHANT_RANGE = 14, -- reader must be this close to the possessed
 
-	-- Damage numbers. A fresh character has 100 health.
-	BALL_DAMAGE = 25,
-	LAVA_DAMAGE = 50,
+	-- Escape meter: fills while the possessed is NOT held; 12 s = escape.
+	ESCAPE_LIMIT = 12,
+	ESCAPE_FILL = 1, -- per second while free
+	ESCAPE_DRAIN = 2, -- per second while held
 
-	-- Falling balls start every 1.4 s and speed up to every 0.7 s
-	-- as the round runs out.
-	BALL_INTERVAL_START = 1.4,
-	BALL_INTERVAL_END = 0.7,
+	-- Speeds (default WalkSpeed 16).
+	READER_SPEED = 16,
+	POSSESSED_SPEED = 14,
+	POSSESSED_BURST_SPEED = 23,
+	POSSESSED_HELD_SPEED = 6,
+	HOLDER_SPEED = 18,
+
+	-- Bot behaviour.
+	BOT_RETARGET_MIN = 0.6,
+	BOT_RETARGET_MAX = 1.6,
+	BOT_BURST_CHANCE = 0.25, -- per retarget while free
+	BOT_BREAK_FREE_EVERY = 4, -- seconds held before a break-free attempt
+	BOT_BREAK_FREE_CHANCE = 0.6,
+
+	-- Doa lines shown while chanting (short, polite).
+	CHANT_LINES = {
+		"A'udzu billahi minasy syaithonir rojim",
+		"Bismillahirrohmanirrohim",
+		"Allahu la ilaha illa Huwal Hayyul Qoyyum",
+	},
 }
 
 return Config

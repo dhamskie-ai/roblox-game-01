@@ -103,6 +103,115 @@ aturan). Screenshot dan game.rbxl starter TIDAK dipakai.
    Kompetisi saat dicek: open, submissionCount 1 (sudah ada 1 entrant lain).
    `main.ts`/`check`/`submit` BELUM dijalankan di run ini (menunggu Public).
 
+## SUBMISSION 15 Nov 2026 19:33 WIB — DITERIMA (signed, HTTP 202)
+
+- Blocker Public TERATASI: Dham set experience ke Public 19:21 WIB
+  (screenshot Creator Dashboard: "Akses game: Publik", "Usia 16+").
+  Verifikasi API: games API mengembalikan nama asli "Tempat SHAMSIE665",
+  creator SHAMSIE665, maxPlayers 50; playability `GuestProhibited`
+  (publik, tamu tanpa login tidak bisa main — normal).
+- Dossier: `MAKEFUN_OUTPUT_DIR=out node main.ts` OK (dossier.json 503.373 byte).
+- Bundle: `bundle-roblox.tar.gz` (202.625 byte, sha256
+  56ae4e87f0a78d6944a642e42d25369ed912264fc9117a44c9a9e13356faec9e).
+  Sesi yang di-bundle: build a727d2ca (cron 19:05 WIB, menulis semua kode
+  game via write tool) + screenshot 97d5721c. Usage rows: a727d2ca
+  (input 1.976.900 / output 27.682) + 97d5721c (input 2.551.965 /
+  output 5.737), model `ipnext/avocado-5.17-v2` — file `muse-usage-roblox.jsonl`.
+  Flag bundle (kit program/v1 menuntut run record lengkap):
+  `--mcp none --provider meta --effort default --harness-version 1.3`
+  (1.3 = versi Muse Spark, satu-satunya versi yang terlihat di runtime;
+  bundle tidak memverifikasi nilainya) + `--prompt-file prompt-roblox.txt`
+  (isi = body cron build), `--prompt-origin scheduled`,
+  `--prompt-via "cron runonce makefun-roblox-game-01-build, 15 Nov 19:05 WIB"`.
+  Catatan: bundle pertama sempat salah memakai sesi 81e0bc9e (itu agen
+  UNSOLVABLE, bukan build) → thinking_reproduces 3,6% FAIL; setelah
+  diganti ke sesi build yang benar → 86,3% PASS.
+- Check (dengan transcripts): **13 passed, 0 failed, 6 skipped**
+  (transcripts_present/recorded, thinking_wellformed/in_window/
+  reproduces 86,3% / turns / priced / revised, transcripts_run_record —
+  semua PASS).
+- Submit SIGNED (escrow at_open): **ACCEPTED HTTP 202, submission
+  `01a1df32-b775-75c6-9561-4188af5cae98`**, "Coin Rush Dodge", signed by
+  6aQ6tuKUAvjyfaya7AGvf8juTQ5TDTfVAvVmoKiaDjPK (payout wallet),
+  server_time 2026-11-15T12:33:25Z, repo
+  https://github.com/dhamskie-ai/roblox-game-01 @
+  `0d5f592caf2a99f5a388d9f3eae0a21979553c67`.
+- Claim code (PRIVAT, jangan di chat): AF-AW6XV-83PAT-2GHV9-WA6ZZ
+- Status hasil: cek via `node cli/makefun.mjs status --submission
+  01a1df32-b775-75c6-9561-4188af5cae98` dari direktori kit. Hasil/juara
+  diumumkan setelah deadline 16 Nov 01:00 WIB (penilaian server).
+
+## GAME BARU — "Kesurupan — Usir Iblis" (ganti Coin Rush Dodge), 15 Nov 2026 ~19:42–19:47 WIB
+
+- Alasan: Dham minta game yang lebih menarik; konsep dari Dham (3 pemain,
+  1 kesurupan acak, 1 baca doa, 1 menahan). Disetujui Dham 19:41 WIB
+  dengan 2 peran lain diisi bot (Dham main sendiri).
+- Aturan kompetisi: entry yang lebih baru menggantikan entry lama (yang lama
+  dibatalkan, satu tempat per peserta) — lihat komentar `competition.yaml`
+  baris ~31 ("once the account has a newer entry"). Entry lama Coin Rush
+  Dodge tetap ter-submit/diterima (01a1df32...) sampai entry baru ini
+  di-submit; submit baru dilakukan SETELAH Dham main + kirim 3 screenshot
+  baru (TIDAK di run ini).
+
+### Desain game
+
+**Kesurupan — Usir Iblis** — co-op 3 pemain di satu ruangan rumah angker
+60×60, pencahayaan malam + kabut, lingkaran ritual ungu di tengah, 4 lilin:
+
+1. **Lobby (10 detik)** — layar start: judul, penjelasan 3 peran, tombol
+   MULAI, countdown. Dua bot berkeliaran di arena supaya ketiga karakter
+   terlihat.
+2. **Ronde (60 detik)** — peran diacak tiap ronde. Solo: pemain = Pembaca
+   Doa, bot = Kesurupan + Penahan. Kesurupan lari tak menentu + burst
+   kecepatan, aura ungu (PointLight + asap) + label "KESURUPAN". Pembaca
+   Doa: dekati kesurupan (≤14 stud), TAHAN tombol "BACA DOA" (atau tahan
+   tombol E) — bar doa terisi 3,5%/dtk HANYA selagi kesurupan tertahan;
+   berhenti/berkurang kalau tidak chant atau kejauhan. Penahan: tempel
+   terus kesurupan (≤5 stud = tertahan, kecepatan kesurupan turun ke 6);
+   kesurupan berkala "break free" (burst 1,5 dtk). Meter kabur terisi
+   selagi kesurupan lepas — 12 detik = kabur.
+3. **Hasil (6 detik)** — bar doa 100% = "IBLIS TERUSIR!" (tim menang,
+   semua pemain +1 Win); kabur = "KESURUPAN KABUR!"; habis waktu =
+   "WAKTU HABIS". Lalu kembali ke lobby.
+
+Leaderstats: **Doa** (poin doa ronde ini) dan **Wins**. Doa yang tampil
+di HUD (berganti tiap 2 detik selagi chant): "A'udzu billahi minasy
+syaithonir rojim", "Bismillahirrohmanirrohim",
+"Allahu la ilaha illa Huwal Hayyul Qoyyum" (teks singkat, sopan).
+
+### File (game baru, ganti total src/ + arena)
+
+| File | Isi |
+|---|---|
+| `default.project.json` | Proyek Rojo "kesurupan-usir-iblis": ruangan 60×60, 4 dinding batu, 4 pilar, lingkaran ritual neon ungu, 4 lilin + PointLight, spawn pad, lighting malam + kabut |
+| `src/server/init.server.luau` | Round loop, assign peran (solo: pemain = Reader), 2 bot (otak kesurupan acak + burst/break-free; otak penahan mengejar), progress doa, meter kabur, leaderstats, RemoteEvents (RoundEvent + ChantEvent) |
+| `src/client/Game.client.luau` | Timer, bar doa, label peran, status tertahan/lepas, peringatan kabur, tombol BACA DOA (tahan; sentuh/mouse) + tombol E, baris doa, layar start (tombol MULAI), layar akhir, overlay ungu saat kesurupan |
+| `src/shared/Config.luau` | Semua angka tuning di satu tempat |
+| `README.md`, `main.ts` | Diperbarui ke judul/desain baru (main.ts agnostik: copy game.rbxl, src/, screenshots/, PLAY.json) |
+| `screenshots/` | **Dikosongkan** — 3 screenshot Coin Rush Dodge dihapus; screenshot baru (game ini) menunggu Dham main + kirim |
+
+### Hasil verifikasi build
+
+- `./bin/rojo build default.project.json --output game.rbxl` (Rojo 7.7.1)
+  — **SUKSES**, `game.rbxl` **17.191 byte** (batas 32 MiB).
+- `src/`: **3 file, 30.022 byte total** (batas 400 file / 4 MiB).
+- Struktur blok Luau seimbang (function/then/do vs end, dikoreksi elseif):
+  server 98−9=89, client 28−4=24. Tidak ada compiler Luau di VM; verifikasi
+  runtime penuh menunggu Dham main (tidak ada Roblox Studio di VM).
+- `main.ts`/`check`/`submit` TIDAK dijalankan di run ini (menunggu
+  screenshot baru + publish — lihat bawah).
+
+### Yang BELUM selesai (bukan di run ini)
+
+1. **Publish game.rbxl baru ke place** — dilakukan di run ini (lihat bawah).
+2. **Screenshot baru (3 buah: start, play, end)** — menunggu Dham main di
+   HP. Tanpa Roblox Studio di VM, screenshot gameplay asli tidak bisa
+   diambil; TIDAK ada screenshot palsu/render yang dibuat.
+3. **Submit ulang ke make.fun** — TIDAK dilakukan di run ini. Baru bisa
+   setelah (1) dan (2) selesai, sebelum deadline **16 Nov 2026 01:00 WIB**.
+   Entry baru ini menggantikan Coin Rush Dodge (yang lama dibatalkan saat
+   entry baru masuk).
+
 ## Langkah Dham (sebelum deadline 01:00 WIB)
 
 a. Di Creator Dashboard dari HP (create.roblox.com/dashboard): pastikan

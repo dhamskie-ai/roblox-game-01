@@ -1,4 +1,4 @@
-// Coin Rush Dodge: the make.fun roblox-game-01 entry (Node 22, standard library only).
+// Kesurupan — Usir Iblis: the make.fun roblox-game-01 entry (Node 22, standard library only).
 // The game is this directory's Rojo project, built into game.rbxl with
 // `rojo build default.project.json --output game.rbxl`, and the program hands it in.
 // It copies game.rbxl, src/, screenshots/ and PLAY.json from beside this file to
