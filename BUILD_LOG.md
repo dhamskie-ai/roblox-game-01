@@ -200,6 +200,10 @@ syaithonir rojim", "Bismillahirrohmanirrohim",
   runtime penuh menunggu Dham main (tidak ada Roblox Studio di VM).
 - `main.ts`/`check`/`submit` TIDAK dijalankan di run ini (menunggu
   screenshot baru + publish — lihat bawah).
+- **Publish — SELESAI 15 Nov ~19:45 WIB:** `roblox.py publish 9874149559
+  93903442181463 game.rbxl` → **HTTP 200, versionNumber 3** (sebelumnya 2).
+  Verifikasi: games API mengembalikan nama asli "Tempat SHAMSIE665",
+  creator SHAMSIE665, updated 19:45:38 WIB — experience tetap Public.
 
 ### Yang BELUM selesai (bukan di run ini)
 
