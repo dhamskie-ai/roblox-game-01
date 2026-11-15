@@ -22,6 +22,8 @@ local progress = 0
 local escapeMeter = 0
 local held = false
 local freeUntil = 0 -- possessed break-free window: held is ignored before this
+local holderStamina = Config.HOLDER_STAMINA_MAX -- seconds of holding left
+local holderRestUntil = 0 -- os.clock timestamp: resting while now < this
 local resultText = ""
 
 -- Roles this round: participant (Player or bot Model) -> role string.
@@ -318,6 +320,8 @@ local function assignRoles()
 	reader = nil
 	holder = nil
 	freeUntil = 0
+	holderStamina = Config.HOLDER_STAMINA_MAX
+	holderRestUntil = 0
 
 	local realPlayers = Players:GetPlayers()
 	local participants = {}
@@ -400,9 +404,18 @@ chantEvent.OnServerEvent:Connect(function(player, value)
 	end
 end)
 
--- Held + prayer tick -----------------------------------------------------------
+-- Held + stamina tick -------------------------------------------------------
+-- Stamina: the holder can hold at most 5 s in a row, then MUST rest 3 s
+-- (cannot hold; the possessed is free and the escape meter runs). After
+-- the rest, stamina is full again. Stamina drains only while actually
+-- holding; it freezes while the holder is not holding.
 
-local function updateHeld()
+local function updateHeld(dt)
+	local now = os.clock()
+	if now < holderRestUntil then
+		held = false
+		return
+	end
 	local pRoot = participantRoot(possessed)
 	local hRoot = participantRoot(holder)
 	if not pRoot or not hRoot then
@@ -410,7 +423,15 @@ local function updateHeld()
 		return
 	end
 	local near = (hRoot.Position - pRoot.Position).Magnitude < 5
-	held = near and os.clock() >= freeUntil
+	held = near and now >= freeUntil
+	if held then
+		holderStamina = holderStamina - dt
+		if holderStamina <= 0 then
+			holderStamina = 0
+			holderRestUntil = now + Config.HOLDER_REST_TIME
+			held = false
+		end
+	end
 end
 
 local function tickRound(dt)
@@ -575,8 +596,25 @@ local function runBot(bot)
 		elseif role == "Holder" then
 			local pRoot = participantRoot(possessed)
 			if pRoot then
-				hum.WalkSpeed = Config.HOLDER_SPEED
-				moveBot(bot, hum, root, pRoot.Position)
+				if now < holderRestUntil then
+					-- Lelah: mundur menjauh dari yang kesurupan selama
+					-- istirahat 3 detik, tidak mengejar/menahan.
+					hum.WalkSpeed = 8
+					local away = root.Position - pRoot.Position
+					if away.Magnitude < 0.1 then
+						away = Vector3.new(1, 0, 0)
+					end
+					local retreat = root.Position + away.Unit * 10
+					retreat = Vector3.new(
+						math.clamp(retreat.X, -Config.ARENA_X_HALF, Config.ARENA_X_HALF),
+						0,
+						math.clamp(retreat.Z, -Config.ARENA_Z_HALF, Config.ARENA_Z_HALF)
+					)
+					moveBot(bot, hum, root, retreat)
+				else
+					hum.WalkSpeed = Config.HOLDER_SPEED
+					moveBot(bot, hum, root, pRoot.Position)
+				end
 			end
 		elseif role == "Reader" then
 			-- A bot reader chases the possessed and chants from close range.
@@ -616,6 +654,8 @@ local function broadcast()
 		held = held,
 		escape = math.floor(escapeMeter + 0.5),
 		escapeLimit = Config.ESCAPE_LIMIT,
+		stamina = math.floor(holderStamina / Config.HOLDER_STAMINA_MAX * 100 + 0.5),
+		resting = os.clock() < holderRestUntil,
 		roles = rolesByName,
 		possessedName = possessed and participantDisplay(possessed) or "",
 		result = resultText,
@@ -661,7 +701,7 @@ local function runRounds()
 			last = now
 			elapsed += dt
 			timeLeft = math.max(0, Config.ROUND_LENGTH - math.floor(elapsed))
-			updateHeld()
+			updateHeld(dt)
 			tickRound(dt)
 			if progress >= 100 then
 				won = true

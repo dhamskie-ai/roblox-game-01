@@ -7,6 +7,8 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
+local SoundService = game:GetService("SoundService")
+local ContentProvider = game:GetService("ContentProvider")
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -29,6 +31,53 @@ local myScore = 0
 local chanting = false
 local chantLineIndex = 1
 local lastChantSwap = 0
+local lastHeld = false -- server says the possessed is held (prayer bar rising)
+
+-- Sounds: every ID verified 2026-11-15 via economy.roblox.com/v2/assets —
+-- exists, AssetTypeId 3 (Audio), IsPublicDomain true (playable by any
+-- experience). No verified mengaji-specific audio exists on Roblox, so
+-- the recitation uses a verified vocal chant instead (see BUILD_LOG).
+local function newSound(name, id, volume, looped)
+	local s = Instance.new("Sound")
+	s.Name = name
+	s.SoundId = "rbxassetid://" .. id
+	s.Volume = volume
+	s.Looped = looped
+	s.Parent = SoundService
+	return s
+end
+
+-- Horror ambient loop (Forgotten Crypt Ambient, DistrokidOfficial).
+local ambientSound = newSound("HorrorAmbient", "139743346356072", 0.3, true)
+-- Recitation while chanting (Gregorian chant vocals, DistrokidOfficial).
+local chantSound = newSound("Chant", "133365325304034", 0.5, true)
+-- Win sting (Funky Fanfare, APMOfficial) / lose sting (T-Rex roar).
+local winSound = newSound("WinSting", "1840511219", 0.5, false)
+local loseSound = newSound("LoseSting", "150829983", 0.5, false)
+
+-- Preload so the first play is not delayed; never blocks the round loop.
+task.spawn(function()
+	pcall(function()
+		ContentProvider:PreloadAsync({ ambientSound, chantSound, winSound, loseSound })
+	end)
+end)
+
+-- The chant sound plays only while the reader holds BACA DOA AND the
+-- possessed is held (i.e. the prayer bar is actually rising); it stops
+-- the moment the button is released or the possessed gets free.
+local function updateChantSound()
+	if chanting and lastHeld then
+		if not chantSound.IsPlaying then
+			pcall(function()
+				chantSound:Play()
+			end)
+		end
+	else
+		if chantSound.IsPlaying then
+			chantSound:Stop()
+		end
+	end
+end
 
 local function formatTime(seconds)
 	local minutes = math.floor(seconds / 60)
@@ -132,6 +181,46 @@ local prayerLabel = newLabel(
 prayerLabel.TextColor3 = GOLD
 prayerLabel.TextSize = 22
 
+-- Holder stamina bar + label: BOTTOM-CENTER above the prayer bar
+-- (label y 736-760, bar y 760-776; prayer bar starts at y 794, so no
+-- overlap). Visible only during a round. Shows "LELAH!" in red while
+-- the holder rests, so players understand why the possessed got free.
+local staminaLabel = newLabel(
+	gui,
+	"Stamina",
+	"STAMINA PENAHAN  100%",
+	UDim2.new(0, 320, 0, 24),
+	UDim2.new(0.5, 0, 1, -248)
+)
+staminaLabel.TextColor3 = GREEN
+staminaLabel.TextSize = 18
+staminaLabel.Visible = false
+
+local staminaBarBack = Instance.new("Frame")
+staminaBarBack.Name = "StaminaBarBack"
+staminaBarBack.AnchorPoint = Vector2.new(0.5, 0)
+staminaBarBack.Position = UDim2.new(0.5, 0, 1, -224)
+staminaBarBack.Size = UDim2.fromOffset(320, 16)
+staminaBarBack.BackgroundColor3 = Color3.fromRGB(15, 12, 22)
+staminaBarBack.BorderSizePixel = 0
+staminaBarBack.Visible = false
+staminaBarBack.Parent = gui
+
+local staminaBarBackCorner = Instance.new("UICorner")
+staminaBarBackCorner.CornerRadius = UDim.new(0, 8)
+staminaBarBackCorner.Parent = staminaBarBack
+
+local staminaFill = Instance.new("Frame")
+staminaFill.Name = "StaminaFill"
+staminaFill.Size = UDim2.fromScale(1, 1)
+staminaFill.BackgroundColor3 = GREEN
+staminaFill.BorderSizePixel = 0
+staminaFill.Parent = staminaBarBack
+
+local staminaFillCorner = Instance.new("UICorner")
+staminaFillCorner.CornerRadius = UDim.new(0, 8)
+staminaFillCorner.Parent = staminaFill
+
 -- Held status line, LEFT under the timer (not top-center): top-center is
 -- where the characters' overhead labels land when they cluster
 -- mid-screen, and the three texts piled up in Dham's screenshot.
@@ -201,19 +290,24 @@ chantButtonCorner.Parent = chantButton
 local hintLabel = newLabel(
 	gui,
 	"Hint",
-	"Dekati yang kesurupan, tahan tombol BACA DOA sampai bar penuh!",
+	"Tahan BACA DOA saat kesurupan ditahan & kamu dekat",
 	UDim2.new(0, 640, 0, 28),
 	UDim2.new(0.5, 0, 1, -40)
 )
 hintLabel.TextSize = 18
 hintLabel.TextTransparency = 0.15
 
--- Start screen: title, the three roles, and the countdown.
+-- Start screen: title, the rules in Dham's own words, and the countdown.
+-- Shown during the lobby (Intermission); hidden once the round starts.
+-- 480x490, centered at (0.5, 0.45): on a 2048x984 phone screen it spans
+-- x 784-1264, y 198-688 — clear of the timer (x 16-276), role (top
+-- right), status/escape (x 16-496, y 116-174), prayer bar (y 794-818),
+-- chant line (y 876-906) and the hint line (y 944-972).
 local startFrame = Instance.new("Frame")
 startFrame.Name = "StartScreen"
 startFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 startFrame.Position = UDim2.fromScale(0.5, 0.45)
-startFrame.Size = UDim2.fromOffset(480, 330)
+startFrame.Size = UDim2.fromOffset(480, 490)
 startFrame.BackgroundColor3 = PANEL
 startFrame.BackgroundTransparency = 0.1
 startFrame.BorderSizePixel = 0
@@ -233,19 +327,34 @@ local titleLabel = newLabel(
 titleLabel.TextColor3 = PURPLE
 titleLabel.TextSize = 34
 
+local caraMainLabel = newLabel(
+	startFrame,
+	"CaraMain",
+	"CARA MAIN",
+	UDim2.new(1, 0, 0, 28),
+	UDim2.new(0.5, 0, 0, 92)
+)
+caraMainLabel.TextColor3 = GOLD
+caraMainLabel.TextSize = 22
+
+-- Dham's rules, verbatim. ~10 wrapped lines at TextSize 20 in 448px
+-- (3 + blank + 3 + blank + 2 lines), 252px tall, top-aligned, left-aligned.
 local rulesLabel = newLabel(
 	startFrame,
 	"Rules",
-	"1 pemain dipilih acak jadi KESURUPAN.\nPEMBACA DOA: dekati dia, tahan BACA DOA.\nPENAHAN: tahan dia supaya tidak kabur.\nBar doa penuh = iblis terusir, tim menang!",
-	UDim2.new(1, -32, 0, 120),
-	UDim2.new(0.5, 0, 0, 96)
+	"KESURUPAN: Kabur membawa raga yang sedang kesurupan. Kalau iblis berhasil membawa raga pergi, IBLIS MENANG.\n\nTIM PENYADAR (Pembaca Doa + Penahan): Tahan yang kesurupan, baca doa sampai bar penuh. Iblis pergi, TIM MENANG.\n\nPENAHAN: hanya bisa menahan 5 detik, lalu istirahat 3 detik.",
+	UDim2.new(1, -32, 0, 252),
+	UDim2.new(0.5, 0, 0, 124)
 )
 rulesLabel.TextSize = 20
+rulesLabel.TextWrapped = true
+rulesLabel.TextXAlignment = Enum.TextXAlignment.Left
+rulesLabel.TextYAlignment = Enum.TextYAlignment.Top
 
 local startButton = Instance.new("TextButton")
 startButton.Name = "StartButton"
 startButton.AnchorPoint = Vector2.new(0.5, 0)
-startButton.Position = UDim2.new(0.5, 0, 0, 224)
+startButton.Position = UDim2.new(0.5, 0, 0, 388)
 startButton.Size = UDim2.fromOffset(180, 52)
 startButton.BackgroundColor3 = PURPLE
 startButton.Font = Enum.Font.GothamBold
@@ -263,7 +372,7 @@ local countdownLabel = newLabel(
 	"Countdown",
 	"Ronde mulai...",
 	UDim2.new(1, 0, 0, 30),
-	UDim2.new(0.5, 0, 0, 288)
+	UDim2.new(0.5, 0, 0, 446)
 )
 countdownLabel.TextColor3 = GOLD
 countdownLabel.TextSize = 20
@@ -324,6 +433,7 @@ local function setChanting(value)
 	chantButton.Text = value and "MEMBACA\nDOA..." or "TAHAN:\nBACA DOA"
 	chantButton.BackgroundColor3 = value and GREEN or PURPLE
 	chantLineLabel.Visible = value
+	updateChantSound()
 	if value then
 		chantLineLabel.Text = Config.CHANT_LINES[chantLineIndex]
 		lastChantSwap = os.clock()
@@ -398,9 +508,34 @@ roundEvent.OnClientEvent:Connect(function(data)
 		escapeLabel.Visible = false
 		chantButton.Visible = false
 		possessedOverlay.Visible = false
+		staminaLabel.Visible = false
+		staminaBarBack.Visible = false
+		if ambientSound.IsPlaying then
+			ambientSound:Stop()
+		end
 	elseif data.state == "Round" then
 		startFrame.Visible = false
 		endFrame.Visible = false
+		staminaLabel.Visible = true
+		staminaBarBack.Visible = true
+		if not ambientSound.IsPlaying then
+			pcall(function()
+				ambientSound:Play()
+			end)
+		end
+		lastHeld = data.held == true
+		updateChantSound()
+		local stamina = data.stamina or 100
+		staminaFill.Size = UDim2.fromScale(math.clamp(stamina / 100, 0, 1), 1)
+		if data.resting then
+			staminaLabel.Text = "LELAH! Penahan istirahat..."
+			staminaLabel.TextColor3 = RED
+			staminaFill.BackgroundColor3 = RED
+		else
+			staminaLabel.Text = "STAMINA PENAHAN  " .. tostring(stamina) .. "%"
+			staminaLabel.TextColor3 = GREEN
+			staminaFill.BackgroundColor3 = GREEN
+		end
 		timerLabel.Text = "RONDE  " .. formatTime(data.timeLeft)
 		local role = data.roles and data.roles[player.Name] or ""
 		myRole = role
@@ -411,7 +546,7 @@ roundEvent.OnClientEvent:Connect(function(data)
 		elseif role == "Reader" then
 			roleLabel.Text = "PERAN: PEMBACA DOA"
 			roleLabel.TextColor3 = GOLD
-			hintLabel.Text = "Dekati yang kesurupan, tahan tombol BACA DOA sampai bar penuh!"
+			hintLabel.Text = "Tahan BACA DOA saat kesurupan ditahan & kamu dekat"
 		elseif role == "Holder" then
 			roleLabel.Text = "PERAN: PENAHAN"
 			roleLabel.TextColor3 = GREEN
@@ -444,6 +579,20 @@ roundEvent.OnClientEvent:Connect(function(data)
 		startFrame.Visible = false
 		endFrame.Visible = true
 		setChanting(false)
+		staminaLabel.Visible = false
+		staminaBarBack.Visible = false
+		if ambientSound.IsPlaying then
+			ambientSound:Stop()
+		end
+		if data.result == "IBLIS TERUSIR!" then
+			pcall(function()
+				winSound:Play()
+			end)
+		else
+			pcall(function()
+				loseSound:Play()
+			end)
+		end
 		timerLabel.Text = "SELESAI"
 		endTitle.Text = data.result or ""
 		if data.result == "IBLIS TERUSIR!" then

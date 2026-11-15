@@ -2,9 +2,9 @@
 -- Server and client both read these numbers, so a balance change is a one-line edit.
 
 local Config = {
-	-- A round lasts 60 seconds; the lobby between rounds lasts 10 seconds;
+	-- A round lasts 90 seconds; the lobby between rounds lasts 10 seconds;
 	-- the end screen stays up for 6 seconds.
-	ROUND_LENGTH = 60,
+	ROUND_LENGTH = 90,
 	INTERMISSION_LENGTH = 10,
 	ENDING_LENGTH = 6,
 
@@ -23,7 +23,7 @@ local Config = {
 
 	-- Prayer progress: fills only while the reader chants close to the
 	-- possessed AND the possessed is held. 100 = demon expelled.
-	-- At 3.5%/s, about 29 s of good chanting wins a 60 s round.
+	-- At 3.5%/s, about 29 s of good chanting wins a 90 s round.
 	PRAYER_RATE_HELD = 3.5, -- % per second while chanting, close, held
 	PRAYER_DECAY = 1.5, -- % per second lost when not chanting / too far
 	CHANT_RANGE = 14, -- reader must be this close to the possessed
@@ -39,6 +39,13 @@ local Config = {
 	POSSESSED_BURST_SPEED = 23,
 	POSSESSED_HELD_SPEED = 6,
 	HOLDER_SPEED = 18,
+
+	-- Holder stamina: at most 5 s of continuous holding, then a forced
+	-- 3 s rest (cannot hold; the possessed is free and the escape meter
+	-- runs). After the rest, stamina is full again. Stamina only drains
+	-- while actually holding; it freezes while not holding.
+	HOLDER_STAMINA_MAX = 5, -- seconds of continuous holding
+	HOLDER_REST_TIME = 3, -- seconds of forced rest at 0 stamina
 
 	-- Bot behaviour.
 	BOT_RETARGET_MIN = 0.6,
