@@ -228,3 +228,39 @@ b. Mainkan gamenya di aplikasi Roblox HP, kirim **3 screenshot asli**
    (start, play, end) ke Bubu.
 c. Setelah (a) dan (b) selesai, Bubu jalankan `check` + submit.
    Waktu mepet: submit baru bisa jalan setelah kedua langkah itu selesai.
+
+## Revisi visual 15 Nov ~19:50 WIB — suasana lebih seram (bukan full gelap)
+
+Permintaan Dham (19:48 WIB): suasana lebih seram, jangan full gelap, tambah
+pernak-pernik horor. **HANYA visual/suasana — gameplay TIDAK diubah**
+(peran acak, Pembaca Doa/Penahan/Kesurupan, bot, ronde 60 dtk, lobby 10 dtk,
+hasil 6 dtk, skor/leaderstats, GUI, teks doa semua sama).
+
+### Yang diubah
+- **Pencahayaan** (`default.project.json`): Ambient 0,08→0,28, Brightness
+  1→2, OutdoorAmbient 0,05→0,2 (cahaya bulan biru keabuan, tetap terang
+  cukup buat lihat 3 karakter + HUD); kabut ditipiskan (FogStart 30→45,
+  FogEnd 120→180); Atmosphere tipis ditambahkan.
+- **Dekor baru di arena 60×60:** 3 jendela cahaya bulan (kaca neon biru
+  pucat), lampu gantung/chandelier + 4 lilin, sarang laba-laba di 4 sudut
+  atas + laba-laba, 3 lukisan tua miring, boneka usang, cermin retak,
+  meja + 2 kursi tua, 3 noda gelap di lantai, jam kakek, lingkaran ritual
+  diperbesar (12→16) + cincin kedua + 8 batu rune neon + cahaya ungu.
+- **Efek dinamis** (`src/server/init.server.luau`, bagian "Atmosphere",
+  visual saja): 4 lilin + lampu gantung berkelip, kabut lantai (4 emitter),
+  3 kelelawar beterbangan dengan sayap mengepak.
+- Label peran, tombol BACA DOA, dan bar doa tidak disentuh — tetap jelas.
+
+### Verifikasi
+- `./bin/rojo build` (Rojo 7.7.1) — **SUKSES**, `game.rbxl` **20.556 byte**
+  (sebelumnya 17.191). Blok Luau seimbang (cek strip komentar/string:
+  server 111−9=102, client 29−4=25, Config 0=0). Tidak ada compiler Luau
+  di VM; verifikasi runtime penuh menunggu Dham main.
+- Commit `f7d10a7` ("revisi: suasana lebih seram + dekor horor..."),
+  push ke main OK.
+- **Publish — SELESAI 15 Nov ~19:50 WIB:** `roblox.py publish 9874149559
+  93903442181463 game.rbxl` → **HTTP 200, versionNumber 4** (sebelumnya 3).
+  Verifikasi: games API mengembalikan nama asli "Tempat SHAMSIE665",
+  creator SHAMSIE665, updated 19:50:54 WIB — experience tetap Public.
+- `main.ts`/`check`/`submit` TIDAK dijalankan di run ini (menunggu
+  screenshot baru + submit ulang sebelum deadline 16 Nov 01:00 WIB).
