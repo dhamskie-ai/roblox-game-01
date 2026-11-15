@@ -192,7 +192,7 @@ local hintLabel = newLabel(
 	"Hint",
 	"Dekati yang kesurupan, tahan tombol BACA DOA sampai bar penuh!",
 	UDim2.new(0, 640, 0, 28),
-	UDim2.new(0.5, 0, 1, -12)
+	UDim2.new(0.5, 0, 1, -40)
 )
 hintLabel.TextSize = 18
 hintLabel.TextTransparency = 0.15

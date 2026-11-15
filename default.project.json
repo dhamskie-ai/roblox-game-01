@@ -5,24 +5,24 @@
   "Lighting": {
    "$properties": {
     "Ambient": [
-     0.62,
-     0.62,
-     0.68
+     0.7,
+     0.7,
+     0.75
     ],
     "Brightness": 3,
-    "ClockTime": 17.5,
+    "ClockTime": 16.5,
     "FogColor": [
-     0.45,
-     0.45,
-     0.55
+     0.5,
+     0.5,
+     0.6
     ],
-    "FogEnd": 250,
-    "FogStart": 60,
+    "FogEnd": 1000,
+    "FogStart": 200,
     "GlobalShadows": true,
     "OutdoorAmbient": [
-     0.48,
-     0.5,
-     0.58
+     0.55,
+     0.57,
+     0.63
     ],
     "Outlines": false,
     "Technology": "Future"
@@ -30,7 +30,7 @@
    "Atmosphere": {
     "$className": "Atmosphere",
     "$properties": {
-     "Density": 0.08,
+     "Density": 0.04,
      "Offset": 0,
      "Color": [
       0.55,
@@ -43,7 +43,7 @@
       0.5
      ],
      "Glare": 0.1,
-     "Haze": 0.6
+     "Haze": 0.4
     }
    }
   },
@@ -736,9 +736,9 @@
      "Anchored": true,
      "CanCollide": false,
      "Color": [
-      0.65,
       0.78,
-      1.0
+      0.82,
+      0.9
      ],
      "Material": "Neon",
      "Transparency": 0.35,
@@ -783,9 +783,9 @@
      "Anchored": true,
      "CanCollide": false,
      "Color": [
-      0.65,
       0.78,
-      1.0
+      0.82,
+      0.9
      ],
      "Material": "Neon",
      "Transparency": 0.35,
@@ -830,9 +830,9 @@
      "Anchored": true,
      "CanCollide": false,
      "Color": [
-      0.65,
       0.78,
-      1.0
+      0.82,
+      0.9
      ],
      "Material": "Neon",
      "Transparency": 0.35,
@@ -1438,57 +1438,6 @@
      ]
     }
    },
-   "PaintingSFrame": {
-    "$className": "Part",
-    "$properties": {
-     "Anchored": true,
-     "CanCollide": false,
-     "Color": [
-      0.5,
-      0.38,
-      0.28
-     ],
-     "Material": "Wood",
-     "Position": [
-      10,
-      7,
-      29.4
-     ],
-     "Size": [
-      4,
-      5,
-      0.5
-     ]
-    }
-   },
-   "PaintingSCanvas": {
-    "$className": "Part",
-    "$properties": {
-     "Anchored": true,
-     "CanCollide": false,
-     "Color": [
-      0.55,
-      0.45,
-      0.32
-     ],
-     "Material": "SmoothPlastic",
-     "Position": [
-      10,
-      7,
-      29.2
-     ],
-     "Size": [
-      3,
-      4,
-      0.3
-     ],
-     "Rotation": [
-      0,
-      0,
-      5
-     ]
-    }
-   },
    "DollDress": {
     "$className": "Part",
     "$properties": {
@@ -1847,84 +1796,15 @@
      ]
     }
    },
-   "OldChair2Seat": {
-    "$className": "Part",
-    "$properties": {
-     "Anchored": true,
-     "CanCollide": false,
-     "Color": [
-      0.55,
-      0.4,
-      0.28
-     ],
-     "Material": "Wood",
-     "Position": [
-      -14,
-      1.2,
-      21.5
-     ],
-     "Size": [
-      1.6,
-      0.4,
-      1.6
-     ]
-    }
-   },
-   "OldChair2Back": {
-    "$className": "Part",
-    "$properties": {
-     "Anchored": true,
-     "CanCollide": false,
-     "Color": [
-      0.55,
-      0.4,
-      0.28
-     ],
-     "Material": "Wood",
-     "Position": [
-      -14,
-      2.2,
-      22.2
-     ],
-     "Size": [
-      1.6,
-      2.2,
-      0.4
-     ]
-    }
-   },
-   "OldChair2Leg": {
-    "$className": "Part",
-    "$properties": {
-     "Anchored": true,
-     "CanCollide": false,
-     "Color": [
-      0.55,
-      0.4,
-      0.28
-     ],
-     "Material": "Wood",
-     "Position": [
-      -14,
-      0.6,
-      21.5
-     ],
-     "Size": [
-      0.4,
-      1.2,
-      0.4
-     ]
-    }
-   },
    "Stain1": {
     "$className": "Part",
     "$properties": {
      "Anchored": true,
      "CanCollide": false,
      "Color": [
-      0.05,
-      0.02,
-      0.02
+      0.35,
+      0.3,
+      0.24
      ],
      "Material": "SmoothPlastic",
      "Transparency": 0.45,
@@ -1952,9 +1832,9 @@
      "Anchored": true,
      "CanCollide": false,
      "Color": [
-      0.05,
-      0.02,
-      0.02
+      0.35,
+      0.3,
+      0.24
      ],
      "Material": "SmoothPlastic",
      "Transparency": 0.45,
@@ -1982,9 +1862,9 @@
      "Anchored": true,
      "CanCollide": false,
      "Color": [
-      0.05,
-      0.02,
-      0.02
+      0.35,
+      0.3,
+      0.24
      ],
      "Material": "SmoothPlastic",
      "Transparency": 0.45,
@@ -2091,6 +1971,144 @@
       "Range": 45,
       "Brightness": 3
      }
+    }
+   },
+   "CurtainN1L": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "Color": [
+      0.62,
+      0.52,
+      0.48
+     ],
+     "Material": "Fabric",
+     "Transparency": 0.15,
+     "Position": [
+      -15.8,
+      7,
+      -29.2
+     ],
+     "Size": [
+      1.2,
+      7.5,
+      0.3
+     ]
+    }
+   },
+   "CurtainN1R": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "Color": [
+      0.62,
+      0.52,
+      0.48
+     ],
+     "Material": "Fabric",
+     "Transparency": 0.15,
+     "Position": [
+      -8.2,
+      7,
+      -29.2
+     ],
+     "Size": [
+      1.2,
+      7.5,
+      0.3
+     ]
+    }
+   },
+   "CurtainN2L": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "Color": [
+      0.62,
+      0.52,
+      0.48
+     ],
+     "Material": "Fabric",
+     "Transparency": 0.15,
+     "Position": [
+      8.2,
+      7,
+      -29.2
+     ],
+     "Size": [
+      1.2,
+      7.5,
+      0.3
+     ]
+    }
+   },
+   "CurtainN2R": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "Color": [
+      0.62,
+      0.52,
+      0.48
+     ],
+     "Material": "Fabric",
+     "Transparency": 0.15,
+     "Position": [
+      15.8,
+      7,
+      -29.2
+     ],
+     "Size": [
+      1.2,
+      7.5,
+      0.3
+     ]
+    }
+   },
+   "CurtainE1L": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "Color": [
+      0.62,
+      0.52,
+      0.48
+     ],
+     "Material": "Fabric",
+     "Transparency": 0.15,
+     "Position": [
+      29.2,
+      7,
+      -3.8
+     ],
+     "Size": [
+      0.3,
+      7.5,
+      1.2
+     ]
+    }
+   },
+   "CurtainE1R": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "Color": [
+      0.62,
+      0.52,
+      0.48
+     ],
+     "Material": "Fabric",
+     "Transparency": 0.15,
+     "Position": [
+      29.2,
+      7,
+      3.8
+     ],
+     "Size": [
+      0.3,
+      7.5,
+      1.2
+     ]
     }
    }
   }

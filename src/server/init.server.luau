@@ -643,6 +643,31 @@ makeFogEmitter(Vector3.new(15, 1, 15))
 makeFogEmitter(Vector3.new(0, 1, -20))
 makeFogEmitter(Vector3.new(-20, 1, 10))
 
+-- Dust motes drifting in the window light: an empty house is dusty,
+-- not foggy. Tiny bright specks, slow, near the windows.
+local function makeDustMotes(position)
+	local anchor = Instance.new("Part")
+	anchor.Name = "DustMotes"
+	anchor.Anchored = true
+	anchor.CanCollide = false
+	anchor.Transparency = 1
+	anchor.Size = Vector3.new(1, 1, 1)
+	anchor.CFrame = CFrame.new(position)
+	anchor.Parent = Workspace
+	local emitter = Instance.new("ParticleEmitter")
+	emitter.Color = ColorSequence.new(Color3.fromRGB(255, 244, 214))
+	emitter.Size = NumberSequence.new(0.25)
+	emitter.Rate = 4
+	emitter.Lifetime = NumberRange.new(8, 12)
+	emitter.Speed = NumberRange.new(0.2, 0.5)
+	emitter.SpreadAngle = Vector2.new(180, 180)
+	emitter.Transparency = NumberSequence.new(0.5)
+	emitter.Parent = anchor
+end
+makeDustMotes(Vector3.new(-12, 6, -26))
+makeDustMotes(Vector3.new(12, 6, -26))
+makeDustMotes(Vector3.new(26, 6, 0))
+
 -- Bats circling the arena with flapping wings.
 local function makeBat()
 	local model = Instance.new("Model")
