@@ -264,3 +264,56 @@ hasil 6 dtk, skor/leaderstats, GUI, teks doa semua sama).
   creator SHAMSIE665, updated 19:50:54 WIB — experience tetap Public.
 - `main.ts`/`check`/`submit` TIDAK dijalankan di run ini (menunggu
   screenshot baru + submit ulang sebelum deadline 16 Nov 01:00 WIB).
+
+## Revisi 2 — arena terang + HUD tidak tumpuk (15 Nov ~19:56 WIB)
+
+Dham main version 4 dan kirim screenshot: arena MASIH TERLALU GELAP
+(hampir hitam total, dekor tidak kelihatan). Penekanan Dham: "jangan
+hitam" — keterlihatan di atas suasana. Revisi ini HANYA visual,
+gameplay TIDAK diubah.
+
+### Pencahayaan (`default.project.json`, Lighting)
+- Ambient 0,28 → **0,62**; Brightness 2 → **3**; OutdoorAmbient 0,2 →
+  **0,48**; ClockTime 0 (tengah malam) → **17.5 (senja, langit biru
+  keunguan terang)**; Fog 45/180 → **60/250**, FogColor diterangkan;
+  Atmosphere Density 0,18 → 0,08, Haze 1,2 → 0,6.
+- Lantai kayu gelap [0.16,0.11,0.08] → **[0.58,0.44,0.32]**; dinding
+  [0.14,0.14,0.18] → **[0.58,0.55,0.64]**; pilar, spawn, bingkai
+  jendela/lukisan/cermin, meja/kursi tua, jam kakek, chandelier semua
+  diterangkan ke kisaran 0,5–0,6. Aksen gelap kecil (laba-laba, noda,
+  retak cermin, kelelawar) SENGAJA tetap gelap: siluet horor yang
+  terbaca di atas dinding terang.
+- Lampu baru **ArenaLight** di tengah arena (0,9,0): PointLight putih
+  hangat, Range 45, Brightness 3. RitualLight diperkuat (1,5 → 3,
+  Range 20 → 28). Nyala lilin berkelip 1,2–1,9 → **2,0–3,0**,
+  chandelier 1,0–1,5 → **2,0–2,8**.
+
+### HUD (`src/client/Game.client.luau`) — per screenshot Dham
+- Timer ronde: tengah atas → **kiri atas** (x=16, y=64, di bawah
+  tombol menu Roblox), rata kiri, TextSize 30.
+- Peran: tetap **kanan atas**, rata kanan — tidak lagi bertumpuk
+  dengan timer.
+- Bar doa + persen: dari bawah timer → **tengah bawah** (bar y=-190,
+  label "DOA x%" y=-162) dengan ruang sendiri.
+- Status ("TERTAHAN/LEPAS") + peringatan kabur: → **tengah atas**
+  (y=64/94), jauh dari kedua sudut.
+- Tombol BACA DOA naik 140px (y=-140) supaya joystick HP tidak
+  menutupinya.
+- Label peran di atas karakter diperkecil (170×36 → **150×30**,
+  TextSize 20 → 18, StudsOffset 3 → 2,5) supaya tidak menabrak HUD.
+
+### Verifikasi
+- `./bin/rojo build` (Rojo 7.7.1) — **SUKSES**, `game.rbxl` **20.947
+  byte** (sebelumnya 20.556). Blok Luau seimbang (cek strip
+  komentar/string: server 111−9=102, client 29−4=25, Config 0=0 —
+  identik dengan revisi 1). Tidak ada compiler Luau di VM; verifikasi
+  runtime penuh menunggu Dham main.
+- Commit `d6c4101` ("revisi 2: arena terang (jangan hitam) + HUD
+  tidak tumpuk"), push ke main OK.
+- **Publish — SELESAI 15 Nov ~19:56 WIB:** `roblox.py publish 9874149559
+  93903442181463 game.rbxl` → **HTTP 200, versionNumber 5** (sebelumnya 4).
+  Verifikasi: games API mengembalikan nama asli "Tempat SHAMSIE665",
+  creator SHAMSIE665, updated 19:56:00 WIB — experience tetap Public.
+- `main.ts`/`check`/`submit` TIDAK dijalankan di run ini (menunggu
+  screenshot baru dari game revisi 2 + submit ulang sebelum deadline
+  16 Nov 01:00 WIB).
