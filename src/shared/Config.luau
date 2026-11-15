@@ -8,9 +8,18 @@ local Config = {
 	INTERMISSION_LENGTH = 10,
 	ENDING_LENGTH = 6,
 
-	-- The arena floor spans -30..30 on X and Z; bots and spawns stay inside
-	-- this smaller half-extent so they never clip into a wall.
-	ARENA_HALF = 26,
+	-- The house spans X -45..45, Z -30..30 (3 rooms); bots and spawns stay
+	-- inside this smaller area so they never clip into an outer wall.
+	ARENA_X_HALF = 43,
+	ARENA_Z_HALF = 26,
+
+	-- Room centres for the round-start scatter (living room, bedroom,
+	-- kitchen). Each round the three participants start in different rooms.
+	ROOM_CENTERS = {
+		Vector3.new(0, 0, 0),
+		Vector3.new(-30, 0, 0),
+		Vector3.new(30, 0, 0),
+	},
 
 	-- Prayer progress: fills only while the reader chants close to the
 	-- possessed AND the possessed is held. 100 = demon expelled.

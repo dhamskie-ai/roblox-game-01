@@ -100,9 +100,101 @@
       0
      ],
      "Size": [
-      60,
+      90,
       2,
       60
+     ]
+    }
+   },
+   "BedBase": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": false,
+     "Color": [
+      0.45,
+      0.32,
+      0.22
+     ],
+     "Material": "Wood",
+     "Position": [
+      -36,
+      0.5,
+      -18
+     ],
+     "Size": [
+      8,
+      1,
+      5
+     ]
+    }
+   },
+   "BedMattress": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": false,
+     "Color": [
+      0.75,
+      0.72,
+      0.68
+     ],
+     "Material": "SmoothPlastic",
+     "Position": [
+      -36,
+      1.4,
+      -18
+     ],
+     "Size": [
+      7.6,
+      0.8,
+      4.6
+     ]
+    }
+   },
+   "BedPillow": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": false,
+     "Color": [
+      0.9,
+      0.88,
+      0.82
+     ],
+     "Material": "SmoothPlastic",
+     "Position": [
+      -38.5,
+      2,
+      -18
+     ],
+     "Size": [
+      2,
+      0.6,
+      3
+     ]
+    }
+   },
+   "Wardrobe": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": false,
+     "Color": [
+      0.4,
+      0.28,
+      0.18
+     ],
+     "Material": "Wood",
+     "Position": [
+      -43,
+      3.5,
+      10
+     ],
+     "Size": [
+      2,
+      7,
+      5
      ]
     }
    },
@@ -405,7 +497,7 @@
      "Locked": true,
      "Material": "SmoothPlastic",
      "Position": [
-      30,
+      45,
       6,
       0
      ],
@@ -433,7 +525,7 @@
       -30
      ],
      "Size": [
-      62,
+      92,
       12,
       2
      ]
@@ -456,7 +548,7 @@
       30
      ],
      "Size": [
-      62,
+      92,
       12,
       2
      ]
@@ -474,7 +566,7 @@
      "Locked": true,
      "Material": "SmoothPlastic",
      "Position": [
-      -30,
+      -45,
       6,
       0
      ],
@@ -482,6 +574,144 @@
       2,
       12,
       62
+     ]
+    }
+   },
+   "WallDivW_A": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "Color": [
+      0.42,
+      0.4,
+      0.48
+     ],
+     "Locked": true,
+     "Material": "SmoothPlastic",
+     "Position": [
+      -15,
+      6,
+      -17
+     ],
+     "Size": [
+      2,
+      12,
+      26
+     ]
+    }
+   },
+   "WallDivW_B": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "Color": [
+      0.42,
+      0.4,
+      0.48
+     ],
+     "Locked": true,
+     "Material": "SmoothPlastic",
+     "Position": [
+      -15,
+      6,
+      17
+     ],
+     "Size": [
+      2,
+      12,
+      26
+     ]
+    }
+   },
+   "WallDivW_Lintel": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "Color": [
+      0.42,
+      0.4,
+      0.48
+     ],
+     "Locked": true,
+     "Material": "SmoothPlastic",
+     "Position": [
+      -15,
+      9.5,
+      0
+     ],
+     "Size": [
+      2,
+      5,
+      8
+     ]
+    }
+   },
+   "WallDivE_A": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "Color": [
+      0.42,
+      0.4,
+      0.48
+     ],
+     "Locked": true,
+     "Material": "SmoothPlastic",
+     "Position": [
+      15,
+      6,
+      -17
+     ],
+     "Size": [
+      2,
+      12,
+      26
+     ]
+    }
+   },
+   "WallDivE_B": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "Color": [
+      0.42,
+      0.4,
+      0.48
+     ],
+     "Locked": true,
+     "Material": "SmoothPlastic",
+     "Position": [
+      15,
+      6,
+      17
+     ],
+     "Size": [
+      2,
+      12,
+      26
+     ]
+    }
+   },
+   "WallDivE_Lintel": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "Color": [
+      0.42,
+      0.4,
+      0.48
+     ],
+     "Locked": true,
+     "Material": "SmoothPlastic",
+     "Position": [
+      15,
+      9.5,
+      0
+     ],
+     "Size": [
+      2,
+      5,
+      8
      ]
     }
    },
@@ -707,6 +937,98 @@
      ]
     }
    },
+   "SofaBase": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": false,
+     "Color": [
+      0.5,
+      0.2,
+      0.25
+     ],
+     "Material": "SmoothPlastic",
+     "Position": [
+      -10,
+      0.6,
+      22
+     ],
+     "Size": [
+      7,
+      1.2,
+      3
+     ]
+    }
+   },
+   "SofaBack": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": false,
+     "Color": [
+      0.5,
+      0.2,
+      0.25
+     ],
+     "Material": "SmoothPlastic",
+     "Position": [
+      -10,
+      1.85,
+      23.3
+     ],
+     "Size": [
+      7,
+      2.5,
+      1
+     ]
+    }
+   },
+   "SofaArmL": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": false,
+     "Color": [
+      0.5,
+      0.2,
+      0.25
+     ],
+     "Material": "SmoothPlastic",
+     "Position": [
+      -13.2,
+      1.5,
+      22
+     ],
+     "Size": [
+      1,
+      1.8,
+      3
+     ]
+    }
+   },
+   "SofaArmR": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": false,
+     "Color": [
+      0.5,
+      0.2,
+      0.25
+     ],
+     "Material": "SmoothPlastic",
+     "Position": [
+      -6.8,
+      1.5,
+      22
+     ],
+     "Size": [
+      1,
+      1.8,
+      3
+     ]
+    }
+   },
    "WindowN1Frame": {
     "$className": "Part",
     "$properties": {
@@ -801,6 +1123,100 @@
      ]
     }
    },
+   "WindowW1Frame": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": false,
+     "Color": [
+      0.5,
+      0.38,
+      0.28
+     ],
+     "Material": "Wood",
+     "Position": [
+      -44.4,
+      7,
+      0
+     ],
+     "Size": [
+      0.5,
+      7,
+      6
+     ]
+    }
+   },
+   "WindowW1Pane": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": false,
+     "Color": [
+      0.9,
+      0.55,
+      0.35
+     ],
+     "Material": "Neon",
+     "Position": [
+      -44.2,
+      7,
+      0
+     ],
+     "Size": [
+      0.3,
+      6,
+      5
+     ],
+     "Transparency": 0.35
+    }
+   },
+   "WindowS1Frame": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": false,
+     "Color": [
+      0.5,
+      0.38,
+      0.28
+     ],
+     "Material": "Wood",
+     "Position": [
+      30,
+      7,
+      29.4
+     ],
+     "Size": [
+      6,
+      7,
+      0.5
+     ]
+    }
+   },
+   "WindowS1Pane": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": false,
+     "Color": [
+      0.9,
+      0.55,
+      0.35
+     ],
+     "Material": "Neon",
+     "Position": [
+      30,
+      7,
+      29.2
+     ],
+     "Size": [
+      5,
+      6,
+      0.3
+     ],
+     "Transparency": 0.35
+    }
+   },
    "WindowE1Frame": {
     "$className": "Part",
     "$properties": {
@@ -813,7 +1229,7 @@
      ],
      "Material": "Wood",
      "Position": [
-      29.4,
+      44.4,
       7,
       0
      ],
@@ -837,7 +1253,7 @@
      "Material": "Neon",
      "Transparency": 0.35,
      "Position": [
-      29.1942,
+      44.1942,
       7,
       0
      ],
@@ -1348,7 +1764,7 @@
      ],
      "Material": "Wood",
      "Position": [
-      -29.4,
+      -44.4,
       7,
       -10
      ],
@@ -1371,7 +1787,7 @@
      ],
      "Material": "SmoothPlastic",
      "Position": [
-      -29.2,
+      -44.2,
       7,
       -10
      ],
@@ -1399,7 +1815,7 @@
      ],
      "Material": "Wood",
      "Position": [
-      29.4,
+      44.4,
       7,
       10
      ],
@@ -1422,7 +1838,7 @@
      ],
      "Material": "SmoothPlastic",
      "Position": [
-      29.2,
+      44.2,
       7,
       10
      ],
@@ -1809,7 +2225,7 @@
      "Material": "SmoothPlastic",
      "Transparency": 0.45,
      "Position": [
-      15,
+      8,
       0.12,
       -15
      ],
@@ -1898,7 +2314,7 @@
      ],
      "Material": "Wood",
      "Position": [
-      -29,
+      -44,
       4,
       5
      ],
@@ -1921,7 +2337,7 @@
      ],
      "Material": "SmoothPlastic",
      "Position": [
-      -28.2,
+      -43.2,
       6,
       5
      ],
@@ -1935,6 +2351,87 @@
       0.3,
       2,
       2
+     ]
+    }
+   },
+   "KitchenCounter": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": false,
+     "Color": [
+      0.55,
+      0.4,
+      0.28
+     ],
+     "Material": "Wood",
+     "Position": [
+      34,
+      1.25,
+      -18
+     ],
+     "Size": [
+      8,
+      2.5,
+      3
+     ]
+    }
+   },
+   "Pot1": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": false,
+     "Color": [
+      0.25,
+      0.25,
+      0.28
+     ],
+     "Material": "Metal",
+     "Position": [
+      32,
+      3.1,
+      -18
+     ],
+     "Rotation": [
+      0,
+      0,
+      90
+     ],
+     "Shape": "Cylinder",
+     "Size": [
+      1.2,
+      1.5,
+      1.5
+     ]
+    }
+   },
+   "Pot2": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": false,
+     "Color": [
+      0.25,
+      0.25,
+      0.28
+     ],
+     "Material": "Metal",
+     "Position": [
+      36,
+      3.1,
+      -18
+     ],
+     "Rotation": [
+      0,
+      0,
+      90
+     ],
+     "Shape": "Cylinder",
+     "Size": [
+      1.2,
+      1.5,
+      1.5
      ]
     }
    },
@@ -1970,6 +2467,78 @@
       ],
       "Range": 45,
       "Brightness": 3
+     }
+    }
+   },
+   "BedroomLight": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": false,
+     "Color": [
+      1,
+      1,
+      1
+     ],
+     "Material": "SmoothPlastic",
+     "Position": [
+      -30,
+      9,
+      0
+     ],
+     "Size": [
+      1,
+      1,
+      1
+     ],
+     "Transparency": 1
+    },
+    "RoomPointLight": {
+     "$className": "PointLight",
+     "$properties": {
+      "Color": [
+       1,
+       0.95,
+       0.85
+      ],
+      "Range": 30,
+      "Brightness": 2.5
+     }
+    }
+   },
+   "KitchenLight": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": false,
+     "Color": [
+      1,
+      1,
+      1
+     ],
+     "Material": "SmoothPlastic",
+     "Position": [
+      30,
+      9,
+      0
+     ],
+     "Size": [
+      1,
+      1,
+      1
+     ],
+     "Transparency": 1
+    },
+    "RoomPointLight": {
+     "$className": "PointLight",
+     "$properties": {
+      "Color": [
+       1,
+       0.95,
+       0.85
+      ],
+      "Range": 30,
+      "Brightness": 2.5
      }
     }
    },
@@ -2077,7 +2646,7 @@
      "Material": "Fabric",
      "Transparency": 0.15,
      "Position": [
-      29.2,
+      44.2,
       7,
       -3.8
      ],
@@ -2100,7 +2669,7 @@
      "Material": "Fabric",
      "Transparency": 0.15,
      "Position": [
-      29.2,
+      44.2,
       7,
       3.8
      ],
@@ -2128,7 +2697,7 @@
       0
      ],
      "Size": [
-      62,
+      92,
       1,
       62
      ]
@@ -2151,7 +2720,7 @@
       -15
      ],
      "Size": [
-      62,
+      92,
       0.8,
       1.5
      ]
@@ -2174,7 +2743,7 @@
       0
      ],
      "Size": [
-      62,
+      92,
       0.8,
       1.5
      ]
@@ -2197,7 +2766,7 @@
       15
      ],
      "Size": [
-      62,
+      92,
       0.8,
       1.5
      ]

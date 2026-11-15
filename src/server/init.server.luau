@@ -6,6 +6,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
+local PathfindingService = game:GetService("PathfindingService")
 
 local Config = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Config"))
 
@@ -198,6 +199,10 @@ local botB = makeBot("BotB", {
 	leg = Color3.fromRGB(50, 60, 90),
 })
 
+-- Start the bots in different rooms, so the lobby already shows the house.
+botA:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-30, 3, 0)
+botB:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(30, 3, 0)
+
 -- Role visuals ---------------------------------------------------------------
 
 -- Label peran di atas kepala: kecil (120x24, TextSize 16), TANPA kotak
@@ -286,6 +291,27 @@ end
 
 -- Roles ----------------------------------------------------------------------
 
+-- Scatter the three participants into different rooms each round, so every
+-- round starts in a different part of the house (not the same spot).
+local function scatterParticipants(participants)
+	local rooms = { 1, 2, 3 }
+	for i = #rooms, 2, -1 do
+		local j = math.random(1, i)
+		rooms[i], rooms[j] = rooms[j], rooms[i]
+	end
+	for i, participant in ipairs(participants) do
+		local center = Config.ROOM_CENTERS[rooms[i]]
+		local root = participantRoot(participant)
+		if root then
+			root.CFrame = CFrame.new(
+				center.X + math.random(-8, 8),
+				3,
+				center.Z + math.random(-10, 10)
+			)
+		end
+	end
+end
+
 local function assignRoles()
 	roles = {}
 	possessed = nil
@@ -294,15 +320,16 @@ local function assignRoles()
 	freeUntil = 0
 
 	local realPlayers = Players:GetPlayers()
+	local participants = {}
 	if #realPlayers == 1 then
 		-- Solo: the human is always the Reader, bots take the other seats.
 		reader = realPlayers[1]
 		possessed = botA
 		holder = botB
+		participants = { reader, possessed, holder }
 	else
 		-- 2+ real players: fill 3 seats with real players first, bots fill
 		-- the rest, then pick the possessed at random.
-		local participants = {}
 		for _, p in ipairs(realPlayers) do
 			table.insert(participants, p)
 		end
@@ -360,6 +387,9 @@ local function assignRoles()
 			end
 		end
 	end
+
+	-- Each round starts with the three participants in different rooms.
+	scatterParticipants(participants)
 end
 
 -- Chant input -----------------------------------------------------------------
@@ -415,12 +445,96 @@ end
 
 -- Bot brains -------------------------------------------------------------------
 
+-- Random point anywhere in the house (all three rooms).
 local function randomPoint()
 	return Vector3.new(
-		math.random(-Config.ARENA_HALF, Config.ARENA_HALF),
+		math.random(-Config.ARENA_X_HALF, Config.ARENA_X_HALF),
 		0,
-		math.random(-Config.ARENA_HALF, Config.ARENA_HALF)
+		math.random(-Config.ARENA_Z_HALF, Config.ARENA_Z_HALF)
 	)
+end
+
+-- Bot pathfinding ---------------------------------------------------------
+-- The house has interior walls with doorways; a straight MoveTo would
+-- walk bots into walls. Bots follow a PathfindingService path instead
+-- (through the doors), falling back to a straight MoveTo only when no
+-- path can be computed. Per-bot waypoint state lives in botPaths.
+
+local botPaths = {}
+
+local function getPathState(bot)
+	local s = botPaths[bot]
+	if not s then
+		s = { waypoints = nil, index = 1, dest = nil, lastCompute = 0, lastPos = nil, lastMove = 0 }
+		botPaths[bot] = s
+	end
+	return s
+end
+
+local function computePath(from, to)
+	local path = PathfindingService:CreatePath({
+		AgentRadius = 2,
+		AgentHeight = 5,
+		AgentCanJump = false,
+		AgentMaxSlope = 45,
+	})
+	local ok = pcall(function()
+		path:ComputeAsync(from, to)
+	end)
+	if not ok or path.Status ~= Enum.PathStatus.Success then
+		return nil
+	end
+	return path:GetWaypoints()
+end
+
+-- Walk a bot toward `target` along a computed path. Call once per bot
+-- tick; keeps its own waypoint state per bot. Recomputes when the target
+-- moved far, when the bot has been stuck ~1.5 s, or at most every 0.75 s.
+local function moveBot(bot, hum, root, target)
+	local state = getPathState(bot)
+	local now = os.clock()
+	local dest = state.dest
+	local needPath = not state.waypoints or not dest
+		or ((dest - target).Magnitude > 6 and now - state.lastCompute > 0.75)
+	if needPath then
+		local wps = computePath(root.Position, target)
+		state.lastCompute = now
+		if wps and #wps > 0 then
+			state.waypoints = wps
+			state.index = 2 -- waypoint 1 is (near) the start point
+			state.dest = target
+		else
+			state.waypoints = nil
+			state.dest = target
+			hum:MoveTo(target)
+			return
+		end
+	end
+	local wps = state.waypoints
+	local idx = state.index
+	if idx > #wps then
+		-- End of path: head straight for the target.
+		hum:MoveTo(target)
+		return
+	end
+	local wp = wps[idx]
+	if (root.Position - wp.Position).Magnitude < 3 then
+		state.index = idx + 1
+		return
+	end
+	-- Stuck? No progress for ~1.5 s while a path remains: drop the path
+	-- so the next tick recomputes (e.g. the target moved behind a wall).
+	if state.lastPos and (root.Position - state.lastPos).Magnitude < 1 then
+		if now - state.lastMove > 1.5 then
+			state.waypoints = nil
+			state.lastMove = now
+			return
+		end
+	else
+		state.lastPos = root.Position
+		state.lastMove = now
+	end
+	hum:MoveTo(wp.Position)
 end
 
 local function runBot(bot)
@@ -457,19 +571,19 @@ local function runBot(bot)
 			else
 				hum.WalkSpeed = Config.POSSESSED_SPEED
 			end
-			hum:MoveTo(target)
+			moveBot(bot, hum, root, target)
 		elseif role == "Holder" then
 			local pRoot = participantRoot(possessed)
 			if pRoot then
 				hum.WalkSpeed = Config.HOLDER_SPEED
-				hum:MoveTo(pRoot.Position)
+				moveBot(bot, hum, root, pRoot.Position)
 			end
 		elseif role == "Reader" then
 			-- A bot reader chases the possessed and chants from close range.
 			local pRoot = participantRoot(possessed)
 			if pRoot then
 				hum.WalkSpeed = Config.READER_SPEED
-				hum:MoveTo(pRoot.Position)
+				moveBot(bot, hum, root, pRoot.Position)
 			end
 		else
 			-- No role yet (lobby): slow wander so all three characters
@@ -479,7 +593,7 @@ local function runBot(bot)
 				nextThink = now + 2.5
 			end
 			hum.WalkSpeed = 8
-			hum:MoveTo(target)
+			moveBot(bot, hum, root, target)
 		end
 		task.wait(0.25)
 	end
@@ -641,8 +755,8 @@ local function makeFogEmitter(position)
 	emitter.Transparency = NumberSequence.new(0.85)
 	emitter.Parent = anchor
 end
-makeFogEmitter(Vector3.new(-15, 1, -15))
-makeFogEmitter(Vector3.new(15, 1, 15))
+makeFogEmitter(Vector3.new(-30, 1, -15))
+makeFogEmitter(Vector3.new(30, 1, 15))
 makeFogEmitter(Vector3.new(0, 1, -20))
 makeFogEmitter(Vector3.new(-20, 1, 10))
 
@@ -709,7 +823,7 @@ local function flyBats()
 			body = body,
 			left = left,
 			right = right,
-			radius = 12 + i * 3,
+			radius = 8 + i * 2, -- stays inside the living room (walls at ±15)
 			height = 9 + i,
 			speed = 0.4 + i * 0.1,
 			phase = i * 2.1,
