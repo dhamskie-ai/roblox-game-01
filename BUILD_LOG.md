@@ -424,3 +424,11 @@ berdekatan. Arahan Dham: "bikin kaya di dalam ruangan".
 - `main.ts`/`check`/`submit` TIDAK dijalankan di run ini (menunggu
   screenshot baru dari game revisi 4 + submit ulang sebelum deadline
   16 Nov 01:00 WIB).
+- Commit `bf200a5` ("revisi 4: senja di dalam ruangan + label peran
+  tidak menumpuk"), push ke main OK.
+- **Publish — SELESAI 15 Nov ~20:03 WIB:** `roblox.py publish 9874149559
+  93903442181463 game.rbxl` → **HTTP 200, versionNumber 7** (sebelumnya 6).
+  Verifikasi: games API mengembalikan nama asli "Tempat SHAMSIE665",
+  creator SHAMSIE665, updated 20:02:50 WIB; playability
+  GuestProhibited (publik, tamu tanpa login tidak bisa main — normal)
+  — experience tetap Public.
