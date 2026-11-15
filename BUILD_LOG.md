@@ -635,3 +635,51 @@ tengah bertumpuk.
   Verifikasi: games API mengembalikan nama asli "Tempat SHAMSIE665",
   creator SHAMSIE665, updated 20:40:05 WIB; playability GuestProhibited
   (publik, normal) — experience tetap Public.
+
+## RESUBMIT — "Kesurupan — Usir Iblis" ganti Coin Rush Dodge (15 Nov 2026 20:51 WIB)
+
+- Dham: "ini yang game coin itu batal aja ganti sama game ini" (20:42 WIB).
+  Entry baru menggantikan entry lama (satu place per entrant); Coin Rush Dodge
+  (01a1df32...) dibatalkan saat entry baru ini masuk.
+- **Screenshot baru (asli dari Dham, game revisi 7 / version 10):**
+  `screenshots/1-start.jpg` (SIAP-SIAP + panel CARA MAIN + MULAI),
+  `2-play.jpg` (RONDE 1:17 + tombol BACA DOA), `3-end.jpg` (SELESAI +
+  "KESURUPAN KABUR!" + Skor doa 0). Resize 1280x615, 73/54/61 KiB (≤256 KiB).
+  Commit screenshot: `c6d7a50`.
+- **Dossier baru:** `MAKEFUN_OUTPUT_DIR=out node main.ts` OK — 131 instances,
+  3 script, 47.243 byte source, matched to src/ 100,0%, dossier.json 311.536 byte.
+  Game.rbxl 28.277 byte (version 10).
+- **Bundle baru** `bundle-kesurupan.tar.gz` (931.175 byte, sha256
+  4de6b7ec242e8d635c0795618e2bbaf534029f48453217a380cbf5d0d80e9201):
+  7 sesi builder Kesurupan (build + revisi 1–7) via --no-discover + --session
+  eksplisit — discovery otomatis DITOLAK karena ikut menarik sesi induk
+  ed870fd7 + c22223dc yang mulai SEBELUM kompetisi buka (thinking_in_window).
+  Sesi: a879d936 (build awal), 7761242f (revisi 1), ef3f302d (revisi 2+3),
+  5cc6e29a (revisi 4), 72585094 (revisi 5), c57cb5db (revisi 6), b5e1948a
+  (revisi 7). TIDAK ikut: a727d2ca (Coin Rush, kodenya sudah diganti),
+  4d0f67cd (agen submit Coin Rush, tidak menulis kode), sesi resubmit ini
+  (05dc7df1 — belum ada usage row; tidak menulis kode game), ed870fd7 /
+  c22223dc (mulai sebelum buka). Usage: `muse-usage-kesurupan.jsonl`
+  (7 baris, satu per agen, model ipnext/avocado-5.17-v2). Prompt:
+  `prompt-kesurupan.txt` (handed-off). Flag: --mcp none --provider meta
+  --effort default --harness-version 1.3. Redaksi: 28 email, 303 home path,
+  2 credential dihapus.
+- **Check (kit dir): 13 passed, 0 failed, 6 skipped, 5 checked at submission**
+  (sama seperti submit Coin Rush). thinking_reproduces 41,2% (1435/3481 baris
+  authored, batas 30%); thinking_in_window lolos (437 timestamp dalam jendela);
+  thinking_priced 7 usage record; thinking_revised lolos (server dari
+  15 pesan). Kompetisi saat submit: open, submissionCount 47.
+- **SUBMIT SIGNED — DITERIMA 15 Nov 2026 20:51:41 WIB:** submission
+  `01a1df7a-6100-7678-abaf-348cb5f91ff6`, "Kesurupan — Usir Iblis", round 2,
+  signed by 6aQ6tuKUAvjyfaya7AGvf8juTQ5TDTfVAvVmoKiaDjPK (payout wallet),
+  server_time 2026-11-15T13:51:41.685Z, repo
+  https://github.com/dhamskie-ai/roblox-game-01 @
+  `5d09820afacc4c5f84ca32f6f8b5ea566e24a1fa`. Status sesudah submit:
+  semua intake check pass (account_wallet, competition_open, quota, form,
+  entry_signature, repo_owner, repo_public, license_osi,
+  repo_created_after_open, commit_in_repo); 2 advisory skip (badge README +
+  About repo — tidak memblokir). Hasil diumumkan setelah deadline;
+  result due 2026-11-30T02:10:00Z.
+- Claim code (PRIVAT, jangan di chat): AF-7K31F-4EF4H-F6DGB-SR1GG
+- Cek status: `node cli/makefun.mjs status --submission
+  01a1df7a-6100-7678-abaf-348cb5f91ff6` dari direktori kit.
