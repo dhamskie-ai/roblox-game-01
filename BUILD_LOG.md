@@ -507,3 +507,76 @@ GUI, teks doa — semua sama.
   creator SHAMSIE665, updated 20:11:26 WIB; playability
   GuestProhibited (publik, tamu tanpa login tidak bisa main — normal)
   — experience tetap Public.
+
+## Revisi 6 — panel CARA MAIN + stamina Penahan + ronde 90 dtk + suara (15 Nov 2026, ~20:23 WIB)
+
+Empat perubahan Dham dalam satu publish (version 9). Commit game `b77d435`
+("revisi 6: panel CARA MAIN + stamina Penahan 5/3 dtk + ronde 90 dtk + suara").
+
+### 1. Panel CARA MAIN (aturan kata-kata Dham, di lobby)
+- Layar start (lobby, Intermission 10 dtk) kini berjudul **CARA MAIN** dengan
+  isi persis kata-kata Dham: "KESURUPAN: Kabur membawa raga yang sedang
+  kesurupan. Kalau iblis berhasil membawa raga pergi, IBLIS MENANG." dan
+  "TIM PENYADAR (Pembaca Doa + Penahan): Tahan yang kesurupan, baca doa
+  sampai bar penuh. Iblis pergi, TIM MENANG." + baris "PENAHAN: hanya bisa
+  menahan 5 detik, lalu istirahat 3 detik."
+- Frame diperbesar 480×410 → 480×490 (rules 176 → 252 px, ~10 baris × 24 px
+  = 240 px, muat). Saat ronde berjalan panel hilang, diganti satu baris
+  petunjuk singkat di bawah: "Tahan BACA DOA saat kesurupan ditahan & kamu dekat".
+- Verifikasi numerik layar HP 2048×984: **0 tumpang tindih** (frame x 784–1264,
+  y 197–687; bar doa y 794–818; tombol BACA DOA x 1838–2028; timer/peran/status
+  semua di luar frame).
+
+### 2. Stamina Penahan (game lebih sulit)
+- `Config.HOLDER_STAMINA_MAX = 5`, `HOLDER_REST_TIME = 3`. Penahan hanya bisa
+  menahan MAKSIMAL 5 detik berturut-turut, lalu WAJIB istirahat 3 detik
+  (tidak bisa menahan, yang kesurupan bebas, escape meter jalan). Setelah
+  istirahat stamina penuh lagi. Stamina berkurang hanya saat benar-benar
+  menahan; diam saat tidak menahan.
+- Berlaku untuk bot Penahan maupun pemain asli yang jadi Penahan (server-side,
+  di `updateHeld(dt)`). Bot Penahan saat lelah mundur menjauh dari yang
+  kesurupan selama 3 detik, lalu mengejar lagi.
+- GUI: bar stamina Penahan + label di atas bar doa (label y 736–760, bar
+  y 760–776, tidak menumpuk bar doa y 794–818); saat istirahat label jadi
+  **"LELAH! Penahan istirahat..."** merah dan bar merah. Bar hanya tampil
+  saat ronde berjalan.
+
+### 3. Ronde 90 detik
+- `Config.ROUND_LENGTH` 60 → **90**. Timer ronde dinamis (formatTime dari
+  `timeLeft` server). Lobby 10 dtk dan hasil 6 dtk tetap. Panel CARA MAIN
+  tidak menyebut durasi ronde, jadi tidak ada teks yang perlu diubah.
+
+### 4. Suara
+- Semua ID diverifikasi 15 Nov 2026 via `economy.roblox.com/v2/assets/{id}/details`
+  (ada, AssetTypeId 3 = Audio, IsPublicDomain true → bisa diputar experience mana pun).
+  Yang DITOLAK verifikasi: 2867960777 (HTTP 400, mati), 1842831525 (Type 1 = Image),
+  140704980462451 + 2778606796 (PublicDomain false), 4913256037 (Type 9 = Place),
+  6895079450 (HTTP 400).
+- **Ambient horor** (loop, volume 0,3, saat ronde; berhenti saat lobby/hasil):
+  `rbxassetid://139743346356072` — "Forgotten Crypt Ambient" (DistrokidOfficial).
+- **Mengaji**: TIDAK ada ID mengaji spesifik yang terverifikasi di Roblox — dipakai
+  vokal/chant ambient terverifikasi sebagai gantinya:
+  `rbxassetid://133365325304034` — "Tank Gregorian Chant" (DistrokidOfficial),
+  loop, volume 0,5. Bunyi hanya saat Pembaca Doa menahan BACA DOA DAN yang
+  kesurupan sedang ditahan (bar doa naik); berhenti saat dilepas atau yang
+  kesurupan lepas.
+- **Menang** "IBLIS TERUSIR!": `rbxassetid://1840511219` — "Funky Fanfare"
+  (APMOfficial), volume 0,5, sekali. **Kalah/kabur**:
+  `rbxassetid://150829983` — "T-Rex Roar" (DDude642), volume 0,5, sekali.
+- Sound dibuat di `SoundService` (playback global 2D), preload via
+  `ContentProvider:PreloadAsync` di task terpisah (tidak memblokir round loop),
+  semua `Play()` dibungkus `pcall`.
+
+### Verifikasi
+- `./bin/rojo build` (Rojo 7.7.1) — **SUKSES**, `game.rbxl` **28.026 byte**
+  (sebelumnya 24.508). Cek keseimbangan blok Luau (strip komentar/string):
+  delta buka−tutup client +4 dan server +9 SAMA seperti HEAD v8 (artefak
+  checker, bukan ketidakseimbangan baru). Tidak ada compiler Luau di VM;
+  verifikasi runtime penuh (termasuk suara benar-benar berbunyi) menunggu Dham main.
+- `main.ts`/`check`/`submit` TIDAK dijalankan di run ini (menunggu screenshot
+  baru dari game revisi 6 + submit ulang sebelum deadline 16 Nov 01:00 WIB).
+- **Publish — SELESAI 15 Nov ~20:23 WIB:** `roblox.py publish 9874149559
+  93903442181463 game.rbxl` → **HTTP 200, versionNumber 9** (sebelumnya 8).
+  Verifikasi: games API mengembalikan nama asli "Tempat SHAMSIE665",
+  creator SHAMSIE665, updated 20:23:12 WIB; playability GuestProhibited
+  (publik, normal) — experience tetap Public.
