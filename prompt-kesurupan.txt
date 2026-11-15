@@ -1,0 +1,12 @@
+Resubmit roblox-game-01 ke make.fun dengan game BARU "Kesurupan — Usir Iblis" (menggantikan entry lama "Coin Rush Dodge" — Dham: "ini yang game coin itu batal aja ganti sama game ini", 15 Nov 20:42 WIB). Entry baru menggantikan entry lama (satu place per entrant, sesuai competition.yaml).
+
+Game: co-op 3 pemain di rumah kosong 3 ruangan (ruang tamu, kamar, dapur), suasana senja horor. 1 pemain acak jadi Kesurupan (tugas: kabur membawa raga — kalau iblis berhasil membawa raga pergi, iblis menang); 1 Pembaca Doa + 1 Penahan = Tim Penyadar (tahan yang kesurupan, baca doa sampai bar penuh — iblis pergi, tim menang). Solo: pemain = Pembaca Doa, 2 bot isi peran lain. Penahan punya stamina: tahan maks 5 detik, istirahat 3 detik. Ronde 90 detik, lobby 10 detik, hasil 6 detik. Panel CARA MAIN di lobby (aturan kata-kata Dham). Suara: ambient horor loop saat ronde + chant saat baca doa + efek menang/kalah. HUD diperkecil (render GUI HP ~2,48x ukuran kode) supaya tidak menutup layar.
+
+Langkah run ini:
+1. Screenshot asli dari Dham (HP, game revisi 7 / version 10): 1-start.jpg (SIAP-SIAP + panel CARA MAIN + MULAI), 2-play.jpg (RONDE 1:17 + tombol BACA DOA), 3-end.jpg (SELESAI + "KESURUPAN KABUR!" + skor doa 0). Resize ke 1280x615, masing-masing ≤256 KiB, ke screenshots/.
+2. Commit + push screenshot ke repo https://github.com/dhamskie-ai/roblox-game-01 (main).
+3. Jalankan MAKEFUN_OUTPUT_DIR=out node main.ts (dossier baru dari game.rbxl + src/ + screenshot baru), lalu node cli/makefun.mjs check dari kit dir.
+4. HANYA BILA check lolos penuh (0 failed), submit SIGNED dengan keypair agen (~/.makefun/keypairs/https_make.fun.json, escrow at_open) sebelum deadline 16 Nov 01:00 WIB. Bila check gagal, JANGAN submit (entry Coin Rush Dodge tetap berlaku).
+5. Catat submission ID + claim code HANYA di BUILD_LOG.md.
+
+Batas keras: JANGAN ubah game-nya, JANGAN minta/tampilkan kredensial apa pun, JANGAN edit MEMORY.md.
