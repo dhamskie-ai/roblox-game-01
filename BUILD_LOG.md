@@ -77,6 +77,32 @@ aturan). Screenshot dan game.rbxl starter TIDAK dipakai.
    Submit memakai keypair agen (`~/.makefun/keypairs/https_make.fun.json`)
    dan bundle + transcripts upload.
 
+## Update submit — 15 Nov 2026 ~19:17 WIB (SEBELUM submit, BLOCKER)
+
+1. **Screenshot — SELESAI.** Dham kirim 3 screenshot ASLI dari HP
+   (2048x984, semua RGB). Diproses (resize 1280x615 + re-encode JPEG):
+   - `screenshots/1-start.jpg` (judul COIN RUSH DODGE) — 88.994 byte
+   - `screenshots/2-play.jpg` (ROUND 0:48, COINS: 3) — 130.464 byte
+   - `screenshots/3-end.jpg` (TIME UP, Winner SHAMSIE665 33 coins) — 144.689 byte
+   Semua ≤256 KiB, sisi panjang 1280, sisi pendek 615 (≥480). TIDAK ada
+   screenshot palsu/render. Commit + push: `d9ecacc` (HEAD baru).
+   Catatan: BUILD_LOG lama menyebut nama file `.png`; yang dipakai `.jpg`
+   (buildDossier menerima PNG atau JPEG — dicek di vendor/makefun-roblox.ts).
+2. **PLAY.json — SUDAH BENAR** (place 93903442181463, universe 9874149559,
+   url roblox.com/games/93903442181463). Publish game.rbxl SUDAH (version 2,
+   15 Nov ~19:13 WIB).
+3. **BLOCKER — experience MASIH PRIVATE.** Cek 19:17 WIB:
+   `multiget-playability-status` → `isPlayable: false`
+   (`ContextualPlayabilityUnrated`); cloud v2 universe →
+   `"visibility": "PRIVATE"`. Juri tidak bisa menilai / play-link check akan
+   menolak. **Submit TIDAK dijalankan** (sesuai aturan: jangan submit bila
+   bukan Public). Menunggu Dham: set experience "Tempat SHAMSIE665" ke
+   **Public** di Creator Dashboard HP. Setelah Public terverifikasi, langkah
+   lanjutan: `MAKEFUN_OUTPUT_DIR=out node main.ts` → `check` → submit SIGNED
+   (keypair agen, escrow at_open) sebelum deadline **16 Nov 01:00 WIB**.
+   Kompetisi saat dicek: open, submissionCount 1 (sudah ada 1 entrant lain).
+   `main.ts`/`check`/`submit` BELUM dijalankan di run ini (menunggu Public).
+
 ## Langkah Dham (sebelum deadline 01:00 WIB)
 
 a. Di Creator Dashboard dari HP (create.roblox.com/dashboard): pastikan
