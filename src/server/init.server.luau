@@ -592,3 +592,121 @@ local function runRounds()
 end
 
 task.spawn(runRounds)
+
+-- Atmosphere (visual only) -------------------------------------------------
+-- Candle flicker, chandelier flicker, floor fog, and circling bats.
+-- This section never reads or writes gameplay state.
+
+local function flickerLights()
+	local flames = {}
+	for _, part in ipairs(Workspace:GetDescendants()) do
+		if part:IsA("PointLight") and part.Name == "Flame" then
+			table.insert(flames, part)
+		end
+	end
+	local chandelier = Workspace:FindFirstChild("ChandelierRing")
+	local chandelierLight = chandelier and chandelier:FindFirstChild("ChandelierLight")
+	while true do
+		for _, flame in ipairs(flames) do
+			flame.Brightness = 1.2 + math.random() * 0.7
+		end
+		if chandelierLight then
+			chandelierLight.Brightness = 1.0 + math.random() * 0.5
+		end
+		task.wait(0.12)
+	end
+end
+task.spawn(flickerLights)
+
+-- Thin ground fog: slow grey puffs drifting over the floor.
+local function makeFogEmitter(position)
+	local anchor = Instance.new("Part")
+	anchor.Name = "FogEmitter"
+	anchor.Anchored = true
+	anchor.CanCollide = false
+	anchor.Transparency = 1
+	anchor.Size = Vector3.new(1, 1, 1)
+	anchor.CFrame = CFrame.new(position)
+	anchor.Parent = Workspace
+	local emitter = Instance.new("ParticleEmitter")
+	emitter.Color = ColorSequence.new(Color3.fromRGB(140, 140, 160))
+	emitter.Size = NumberSequence.new(6)
+	emitter.Rate = 3
+	emitter.Lifetime = NumberRange.new(6, 9)
+	emitter.Speed = NumberRange.new(0.5, 1.5)
+	emitter.SpreadAngle = Vector2.new(180, 180)
+	emitter.Transparency = NumberSequence.new(0.85)
+	emitter.Parent = anchor
+end
+makeFogEmitter(Vector3.new(-15, 1, -15))
+makeFogEmitter(Vector3.new(15, 1, 15))
+makeFogEmitter(Vector3.new(0, 1, -20))
+makeFogEmitter(Vector3.new(-20, 1, 10))
+
+-- Bats circling the arena with flapping wings.
+local function makeBat()
+	local model = Instance.new("Model")
+	model.Name = "Bat"
+	local body = Instance.new("Part")
+	body.Name = "Body"
+	body.Size = Vector3.new(0.8, 0.4, 1.4)
+	body.Color = Color3.fromRGB(15, 10, 20)
+	body.Material = Enum.Material.SmoothPlastic
+	body.Anchored = true
+	body.CanCollide = false
+	body.Parent = model
+	local function wing(name)
+		local w = Instance.new("Part")
+		w.Name = name
+		w.Size = Vector3.new(1.8, 0.1, 0.9)
+		w.Color = Color3.fromRGB(25, 15, 35)
+		w.Material = Enum.Material.SmoothPlastic
+		w.Anchored = true
+		w.CanCollide = false
+		w.Parent = model
+		return w
+	end
+	local left = wing("LeftWing")
+	local right = wing("RightWing")
+	model.Parent = Workspace
+	return model, body, left, right
+end
+
+local function flyBats()
+	local bats = {}
+	for i = 1, 3 do
+		local model, body, left, right = makeBat()
+		table.insert(bats, {
+			model = model,
+			body = body,
+			left = left,
+			right = right,
+			radius = 12 + i * 3,
+			height = 9 + i,
+			speed = 0.4 + i * 0.1,
+			phase = i * 2.1,
+		})
+	end
+	local t = 0
+	while true do
+		t += 0.05
+		for _, bat in ipairs(bats) do
+			local angle = bat.phase + t * bat.speed
+			local pos = Vector3.new(
+				math.cos(angle) * bat.radius,
+				bat.height + math.sin(t * 1.3 + bat.phase) * 1.2,
+				math.sin(angle) * bat.radius
+			)
+			local facing = CFrame.lookAt(
+				pos,
+				pos + Vector3.new(-math.sin(angle), 0, math.cos(angle))
+			)
+			bat.body.CFrame = facing
+			local flap = math.sin(t * 12 + bat.phase) * 0.7
+			bat.left.CFrame = facing * CFrame.new(-1.2, 0.1, 0) * CFrame.Angles(0, 0, flap)
+			bat.right.CFrame = facing * CFrame.new(1.2, 0.1, 0) * CFrame.Angles(0, 0, -flap)
+		end
+		task.wait(0.05)
+	end
+end
+task.spawn(flyBats)
