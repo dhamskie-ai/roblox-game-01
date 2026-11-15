@@ -68,16 +68,20 @@ possessedOverlay.BorderSizePixel = 0
 possessedOverlay.Visible = false
 possessedOverlay.Parent = gui
 
--- Top bar: the timer in the middle, the role on the right,
--- clear of the top-left corner where Roblox puts its own menu buttons.
+-- Top bar: the timer TOP-LEFT (below Roblox's own menu buttons),
+-- the role TOP-RIGHT. They can no longer overlap: the timer used to sit
+-- centered and ran into the role label on a phone screen.
+-- Status + escape warning sit TOP-CENTER, clear of both corners.
 local timerLabel = newLabel(
 	gui,
 	"Timer",
 	"SIAP-SIAP",
-	UDim2.new(0, 320, 0, 44),
-	UDim2.new(0.5, 0, 0, 8)
+	UDim2.new(0, 260, 0, 44),
+	UDim2.new(0, 16, 0, 64),
+	Vector2.new(0, 0)
 )
-timerLabel.TextSize = 32
+timerLabel.TextSize = 30
+timerLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local roleLabel = newLabel(
 	gui,
@@ -89,12 +93,15 @@ local roleLabel = newLabel(
 )
 roleLabel.TextColor3 = GOLD
 roleLabel.TextSize = 26
+roleLabel.TextXAlignment = Enum.TextXAlignment.Right
 
--- Prayer bar under the timer.
+-- Prayer bar + percent: BOTTOM-CENTER with their own space, far from
+-- the top bar (the old bar sat under the timer and the percent text
+-- got covered by it).
 local prayerBarBack = Instance.new("Frame")
 prayerBarBack.Name = "PrayerBarBack"
 prayerBarBack.AnchorPoint = Vector2.new(0.5, 0)
-prayerBarBack.Position = UDim2.new(0.5, 0, 0, 58)
+prayerBarBack.Position = UDim2.new(0.5, 0, 1, -190)
 prayerBarBack.Size = UDim2.fromOffset(320, 24)
 prayerBarBack.BackgroundColor3 = Color3.fromRGB(15, 12, 22)
 prayerBarBack.BorderSizePixel = 0
@@ -120,28 +127,28 @@ local prayerLabel = newLabel(
 	"Prayer",
 	"DOA  0%",
 	UDim2.new(0, 320, 0, 28),
-	UDim2.new(0.5, 0, 0, 84)
+	UDim2.new(0.5, 0, 1, -162)
 )
 prayerLabel.TextColor3 = GOLD
 prayerLabel.TextSize = 22
 
--- Held status line under the prayer bar.
+-- Held status line, top-center (clear of timer left and role right).
 local statusLabel = newLabel(
 	gui,
 	"Status",
 	"",
-	UDim2.new(0, 560, 0, 28),
-	UDim2.new(0.5, 0, 0, 114)
+	UDim2.new(0, 480, 0, 28),
+	UDim2.new(0.5, 0, 0, 64)
 )
 statusLabel.TextSize = 20
 
--- Escape warning, shown only while the possessed is slipping away.
+-- Escape warning, top-center under the status line.
 local escapeLabel = newLabel(
 	gui,
 	"Escape",
 	"",
-	UDim2.new(0, 560, 0, 28),
-	UDim2.new(0.5, 0, 0, 142)
+	UDim2.new(0, 480, 0, 28),
+	UDim2.new(0.5, 0, 0, 94)
 )
 escapeLabel.TextColor3 = RED
 escapeLabel.TextSize = 20
@@ -161,10 +168,12 @@ chantLineLabel.Visible = false
 
 -- Chant button: hold it (touch or mouse) to read the doa.
 -- Only visible while this player is the Reader in a round.
+-- Lifted 140px off the bottom so the mobile thumbstick (which pops up
+-- at the bottom corner) does not cover it.
 local chantButton = Instance.new("TextButton")
 chantButton.Name = "ChantButton"
 chantButton.AnchorPoint = Vector2.new(1, 1)
-chantButton.Position = UDim2.new(1, -20, 1, -20)
+chantButton.Position = UDim2.new(1, -20, 1, -140)
 chantButton.Size = UDim2.fromOffset(190, 84)
 chantButton.BackgroundColor3 = PURPLE
 chantButton.Font = Enum.Font.GothamBold

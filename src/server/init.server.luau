@@ -214,8 +214,8 @@ local function setOverheadLabel(character, text, color)
 	end
 	local gui = Instance.new("BillboardGui")
 	gui.Name = "RoleLabel"
-	gui.Size = UDim2.fromOffset(170, 36)
-	gui.StudsOffset = Vector3.new(0, 3, 0)
+	gui.Size = UDim2.fromOffset(150, 30)
+	gui.StudsOffset = Vector3.new(0, 2.5, 0)
 	gui.AlwaysOnTop = true
 	gui.Parent = head
 	local label = Instance.new("TextLabel")
@@ -225,7 +225,7 @@ local function setOverheadLabel(character, text, color)
 	label.Font = Enum.Font.GothamBold
 	label.Text = text
 	label.TextColor3 = color
-	label.TextSize = 20
+	label.TextSize = 18
 	label.TextStrokeTransparency = 0.5
 	label.Parent = gui
 end
@@ -608,10 +608,10 @@ local function flickerLights()
 	local chandelierLight = chandelier and chandelier:FindFirstChild("ChandelierLight")
 	while true do
 		for _, flame in ipairs(flames) do
-			flame.Brightness = 1.2 + math.random() * 0.7
+			flame.Brightness = 2.0 + math.random() * 1.0
 		end
 		if chandelierLight then
-			chandelierLight.Brightness = 1.0 + math.random() * 0.5
+			chandelierLight.Brightness = 2.0 + math.random() * 0.8
 		end
 		task.wait(0.12)
 	end
