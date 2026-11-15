@@ -317,3 +317,57 @@ gameplay TIDAK diubah.
 - `main.ts`/`check`/`submit` TIDAK dijalankan di run ini (menunggu
   screenshot baru dari game revisi 2 + submit ulang sebelum deadline
   16 Nov 01:00 WIB).
+
+## Revisi 3 — suasana rumah kosong + terang aman (15 Nov ~19:57 WIB)
+
+Arahan Dham: "kayak di rumah kosong" + "bikin yang bener". Seramnya
+dari kesan sepi dan ditinggalkan, bukan dari kegelapan. Nilai
+pencahayaan diambil yang PALING TERANG bila ragu. Gameplay TIDAK
+diubah.
+
+### Suasana rumah kosong (`default.project.json`)
+- Pencahayaan: Ambient 0,62 → **0,7**; Brightness 3 (tetap);
+  ClockTime 17,5 → **16,5 (sore — cahaya siang/senja masuk lewat
+  jendela)**; OutdoorAmbient 0,48 → **0,55**; Fog 60/250 → **200/1000
+  (praktis tanpa kabut)**; Atmosphere Density 0,08 → **0,04**,
+  Haze 0,6 → 0,4.
+- Tirai usang (Fabric, abu mawar berdebu) di ketiga jendela: 6 panel
+  (2 per jendela utara, 2 di jendela timur).
+- Debu beterbangan di cahaya jendela: 3 emitter "DustMotes" baru
+  (`src/server/init.server.luau`, dekat jendela utara ×2 + timur),
+  partikel kecil terang, lambat.
+- Lantai berdebu: 3 noda hitam → **bercak debu coklat muda
+  [0.35,0.3,0.24]**; kaca jendela berdebu [0.78,0.82,0.9].
+- Perabot dikurangi (ruangan terasa kosong): lukisan dinding selatan
+  + kursi kedua DIBUANG. Sisanya tetap: 2 lukisan, boneka, cermin
+  retak, meja + 1 kursi, jam kakek, chandelier, lilin, sarang
+  laba-laba, lingkaran ritual.
+
+### HUD dicek ulang (`src/client/Game.client.luau`)
+- Verifikasi numerik posisi semua elemen pada layar HP 2048×984:
+  **0 tumpang tindih**. Timer kiri atas (16–276, y 64–108), peran
+  kanan atas (1752–2032, y 10–50), status/escape tengah atas
+  (784–1264, y 64–122), bar doa (y 794–818) + persen (822–850),
+  baris doa (876–906), tombol BACA DOA (1838–2028, y 760–844).
+- SATU CACAT DITEMUKAN + DIPERBAIKI: teks petunjuk bawah ("Dekati
+  yang kesurupan...") posisinya y=-12 — 16px bagian bawahnya
+  terpotong di luar layar (terlihat di screenshot Dham). Dipindah ke
+  y=-40 (944–972, penuh di layar).
+
+### Verifikasi
+- `./bin/rojo build` (Rojo 7.7.1) — **SUKSES**, `game.rbxl` **21.228
+  byte** (sebelumnya 20.947). Blok Luau seimbang (cek strip
+  komentar/string: server 112−9=103, client 29−4=25, Config 0=0).
+  Tidak ada compiler Luau di VM; verifikasi runtime penuh menunggu
+  Dham main.
+- Commit `4537af1` ("revisi 3: suasana rumah kosong + terang aman +
+  HUD dicek ulang"), push ke main OK.
+- **Publish — SELESAI 15 Nov ~19:57 WIB:** `roblox.py publish 9874149559
+  93903442181463 game.rbxl` → **HTTP 200, versionNumber 6** (sebelumnya 5).
+  Verifikasi: games API mengembalikan nama asli "Tempat SHAMSIE665",
+  creator SHAMSIE665, updated 19:57:31 WIB; playability
+  GuestProhibited (publik, tamu tanpa login tidak bisa main — normal)
+  — experience tetap Public.
+- `main.ts`/`check`/`submit` TIDAK dijalankan di run ini (menunggu
+  screenshot baru dari game revisi 3 + submit ulang sebelum deadline
+  16 Nov 01:00 WIB).
