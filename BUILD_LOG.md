@@ -371,3 +371,56 @@ diubah.
 - `main.ts`/`check`/`submit` TIDAK dijalankan di run ini (menunggu
   screenshot baru dari game revisi 3 + submit ulang sebelum deadline
   16 Nov 01:00 WIB).
+
+## Revisi 4 — senja di dalam ruangan + label peran tidak menumpuk (15 Nov 2026)
+
+Alasan: screenshot Dham setelah revisi 3 — langit biru siang terang
+kelihatan dari arena, suasana horor hilang ("apa seremnya terang
+banget gini"); label peran menumpuk di tengah layar saat karakter
+berdekatan. Arahan Dham: "bikin kaya di dalam ruangan".
+
+### Ruangan tertutup — langit tidak terlihat (`default.project.json`)
+- Langit-langit baru `Ceiling` (62×1×62 di y=12,5, kayu gelap) + 3
+  balok langit-langit. Dinding 4 sisi setinggi 12 sudah ada — arena
+  kini ruangan tertutup penuh; langit TIDAK terlihat dari dalam.
+  Cahaya masuk lewat 3 jendela di dinding + lampu gantung/lilin.
+- Kaca jendela: biru pucat → oranye senja [0.9, 0.55, 0.35].
+
+### Pencahayaan senja/magrib — tengah-tengah (bukan siang, bukan gelap)
+- Ambient [0.7,0.7,0.75] → **[0.45, 0.45, 0.52]**, Brightness 3 → **2**,
+  ClockTime 16.5 → **18.25** (senja ungu-biru), OutdoorAmbient
+  [0.55,0.57,0.63] → **[0.3, 0.3, 0.38]**, Fog 200/1000 → **80/300**,
+  FogColor ungu muram [0.32, 0.28, 0.42], Atmosphere Density 0.04 →
+  **0.12**, Color ungu senja [0.45, 0.35, 0.6], Haze 0.6.
+- Lantai kayu [0.58,0.44,0.32] → **[0.42, 0.32, 0.22]**, dinding
+  [0.58,0.55,0.64] → **[0.42, 0.4, 0.48]**, pilar → [0.4, 0.38, 0.46]
+  (agak gelap tapi tetap terlihat). ArenaLight (Range 45, Brightness 3)
+  + lilin + lampu gantung (1.8) tetap menyala.
+
+### Label peran tidak menumpuk (`src/server/init.server.luau`)
+- `setOverheadLabel` kini terima `offsetY` per peran: KESURUPAN 3.8,
+  PENAHAN 3.4, PEMBACA DOA 3.0 — label tidak lagi satu garis saat
+  karakter berdekatan. Ukuran 150×30 → **120×24**, TextSize 18 → **16**,
+  kotak background gelap DIHAPUS (BackgroundTransparency 1, outline
+  tebal TextStrokeTransparency 0 sebagai gantinya).
+
+### Teks status pindah (`src/client/Game.client.luau`)
+- `statusLabel` + `escapeLabel` pindah dari tengah-atas (y 64/94 —
+  tempat label karakter mendarat saat bergerombol di tengah layar) ke
+  kolom kiri di bawah timer (x=16, y=116/146), rata kiri, dengan panel
+  gelap di belakang teks supaya tetap terbaca.
+
+### Verifikasi
+- Verifikasi numerik posisi semua elemen HUD pada layar HP 2048×984:
+  **0 tumpang tindih**. Timer (16–276, y 64–108), peran (1752–2032,
+  y 10–50), status (16–496, y 116–144), escape (16–496, y 146–174),
+  bar doa (y 794–818) + persen (822–850), baris doa (876–906),
+  tombol BACA DOA (1838–2028, y 760–844).
+- `./bin/rojo build` (Rojo 7.7.1) — **SUKSES**, `game.rbxl` **21.861
+  byte** (sebelumnya 21.228). Blok Luau seimbang (cek strip
+  komentar/string: server 103=103, client 25=25, Config 0=0).
+  Tidak ada compiler Luau di VM; verifikasi runtime penuh menunggu
+  Dham main.
+- `main.ts`/`check`/`submit` TIDAK dijalankan di run ini (menunggu
+  screenshot baru dari game revisi 4 + submit ulang sebelum deadline
+  16 Nov 01:00 WIB).

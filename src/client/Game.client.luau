@@ -132,26 +132,37 @@ local prayerLabel = newLabel(
 prayerLabel.TextColor3 = GOLD
 prayerLabel.TextSize = 22
 
--- Held status line, top-center (clear of timer left and role right).
+-- Held status line, LEFT under the timer (not top-center): top-center is
+-- where the characters' overhead labels land when they cluster
+-- mid-screen, and the three texts piled up in Dham's screenshot.
+-- A dark panel behind the text keeps it readable if a label passes by.
 local statusLabel = newLabel(
 	gui,
 	"Status",
 	"",
 	UDim2.new(0, 480, 0, 28),
-	UDim2.new(0.5, 0, 0, 64)
+	UDim2.new(0, 16, 0, 116),
+	Vector2.new(0, 0)
 )
 statusLabel.TextSize = 20
+statusLabel.TextXAlignment = Enum.TextXAlignment.Left
+statusLabel.BackgroundTransparency = 0.3
+statusLabel.BackgroundColor3 = PANEL
 
--- Escape warning, top-center under the status line.
+-- Escape warning, left under the status line.
 local escapeLabel = newLabel(
 	gui,
 	"Escape",
 	"",
 	UDim2.new(0, 480, 0, 28),
-	UDim2.new(0.5, 0, 0, 94)
+	UDim2.new(0, 16, 0, 146),
+	Vector2.new(0, 0)
 )
 escapeLabel.TextColor3 = RED
 escapeLabel.TextSize = 20
+escapeLabel.TextXAlignment = Enum.TextXAlignment.Left
+escapeLabel.BackgroundTransparency = 0.3
+escapeLabel.BackgroundColor3 = PANEL
 escapeLabel.Visible = false
 
 -- The doa line being chanted, bottom center.

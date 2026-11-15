@@ -200,7 +200,11 @@ local botB = makeBot("BotB", {
 
 -- Role visuals ---------------------------------------------------------------
 
-local function setOverheadLabel(character, text, color)
+-- Label peran di atas kepala: kecil (120x24, TextSize 16), TANPA kotak
+-- background (BackgroundTransparency 1, outline tebal sebagai gantinya),
+-- dan StudsOffset BERBEDA per peran supaya saat ketiga karakter
+-- berdekatan labelnya tidak menumpuk di satu garis yang sama.
+local function setOverheadLabel(character, text, color, offsetY)
 	if not character then
 		return
 	end
@@ -214,19 +218,18 @@ local function setOverheadLabel(character, text, color)
 	end
 	local gui = Instance.new("BillboardGui")
 	gui.Name = "RoleLabel"
-	gui.Size = UDim2.fromOffset(150, 30)
-	gui.StudsOffset = Vector3.new(0, 2.5, 0)
+	gui.Size = UDim2.fromOffset(120, 24)
+	gui.StudsOffset = Vector3.new(0, offsetY or 3, 0)
 	gui.AlwaysOnTop = true
 	gui.Parent = head
 	local label = Instance.new("TextLabel")
 	label.Size = UDim2.fromScale(1, 1)
-	label.BackgroundTransparency = 0.35
-	label.BackgroundColor3 = Color3.fromRGB(20, 16, 28)
+	label.BackgroundTransparency = 1
 	label.Font = Enum.Font.GothamBold
 	label.Text = text
 	label.TextColor3 = color
-	label.TextSize = 18
-	label.TextStrokeTransparency = 0.5
+	label.TextSize = 16
+	label.TextStrokeTransparency = 0
 	label.Parent = gui
 end
 
@@ -340,11 +343,11 @@ local function assignRoles()
 		local char = participantCharacter(participant)
 		if role == "Possessed" then
 			applyPossessedAura(char)
-			setOverheadLabel(char, "KESURUPAN", Color3.fromRGB(255, 70, 70))
+			setOverheadLabel(char, "KESURUPAN", Color3.fromRGB(255, 70, 70), 3.8)
 		elseif role == "Reader" then
-			setOverheadLabel(char, "PEMBACA DOA", Color3.fromRGB(255, 220, 90))
+			setOverheadLabel(char, "PEMBACA DOA", Color3.fromRGB(255, 220, 90), 3.0)
 		else
-			setOverheadLabel(char, "PENAHAN", Color3.fromRGB(90, 220, 120))
+			setOverheadLabel(char, "PENAHAN", Color3.fromRGB(90, 220, 120), 3.4)
 		end
 		local hum = participantHumanoid(participant)
 		if hum then

@@ -5,24 +5,24 @@
   "Lighting": {
    "$properties": {
     "Ambient": [
-     0.7,
-     0.7,
-     0.75
+     0.45,
+     0.45,
+     0.52
     ],
-    "Brightness": 3,
-    "ClockTime": 16.5,
+    "Brightness": 2,
+    "ClockTime": 18.25,
     "FogColor": [
-     0.5,
-     0.5,
-     0.6
+     0.32,
+     0.28,
+     0.42
     ],
-    "FogEnd": 1000,
-    "FogStart": 200,
+    "FogEnd": 300,
+    "FogStart": 80,
     "GlobalShadows": true,
     "OutdoorAmbient": [
-     0.55,
-     0.57,
-     0.63
+     0.3,
+     0.3,
+     0.38
     ],
     "Outlines": false,
     "Technology": "Future"
@@ -30,20 +30,20 @@
    "Atmosphere": {
     "$className": "Atmosphere",
     "$properties": {
-     "Density": 0.04,
+     "Density": 0.12,
      "Offset": 0,
      "Color": [
-      0.55,
-      0.6,
-      0.75
+      0.45,
+      0.35,
+      0.6
      ],
      "Decay": [
-      0.35,
-      0.4,
-      0.5
+      0.3,
+      0.25,
+      0.45
      ],
-     "Glare": 0.1,
-     "Haze": 0.4
+     "Glare": 0.15,
+     "Haze": 0.6
     }
    }
   },
@@ -88,9 +88,9 @@
      "Anchored": true,
      "CanCollide": true,
      "Color": [
-      0.58,
-      0.44,
-      0.32
+      0.42,
+      0.32,
+      0.22
      ],
      "Locked": true,
      "Material": "Wood",
@@ -247,9 +247,9 @@
     "$properties": {
      "Anchored": true,
      "Color": [
-      0.52,
-      0.5,
-      0.58
+      0.4,
+      0.38,
+      0.46
      ],
      "Material": "SmoothPlastic",
      "Position": [
@@ -269,9 +269,9 @@
     "$properties": {
      "Anchored": true,
      "Color": [
-      0.52,
-      0.5,
-      0.58
+      0.4,
+      0.38,
+      0.46
      ],
      "Material": "SmoothPlastic",
      "Position": [
@@ -291,9 +291,9 @@
     "$properties": {
      "Anchored": true,
      "Color": [
-      0.52,
-      0.5,
-      0.58
+      0.4,
+      0.38,
+      0.46
      ],
      "Material": "SmoothPlastic",
      "Position": [
@@ -313,9 +313,9 @@
     "$properties": {
      "Anchored": true,
      "Color": [
-      0.52,
-      0.5,
-      0.58
+      0.4,
+      0.38,
+      0.46
      ],
      "Material": "SmoothPlastic",
      "Position": [
@@ -398,9 +398,9 @@
     "$properties": {
      "Anchored": true,
      "Color": [
-      0.58,
-      0.55,
-      0.64
+      0.42,
+      0.4,
+      0.48
      ],
      "Locked": true,
      "Material": "SmoothPlastic",
@@ -421,9 +421,9 @@
     "$properties": {
      "Anchored": true,
      "Color": [
-      0.58,
-      0.55,
-      0.64
+      0.42,
+      0.4,
+      0.48
      ],
      "Locked": true,
      "Material": "SmoothPlastic",
@@ -444,9 +444,9 @@
     "$properties": {
      "Anchored": true,
      "Color": [
-      0.58,
-      0.55,
-      0.64
+      0.42,
+      0.4,
+      0.48
      ],
      "Locked": true,
      "Material": "SmoothPlastic",
@@ -467,9 +467,9 @@
     "$properties": {
      "Anchored": true,
      "Color": [
-      0.58,
-      0.55,
-      0.64
+      0.42,
+      0.4,
+      0.48
      ],
      "Locked": true,
      "Material": "SmoothPlastic",
@@ -736,9 +736,9 @@
      "Anchored": true,
      "CanCollide": false,
      "Color": [
-      0.78,
-      0.82,
-      0.9
+      0.9,
+      0.55,
+      0.35
      ],
      "Material": "Neon",
      "Transparency": 0.35,
@@ -783,9 +783,9 @@
      "Anchored": true,
      "CanCollide": false,
      "Color": [
-      0.78,
-      0.82,
-      0.9
+      0.9,
+      0.55,
+      0.35
      ],
      "Material": "Neon",
      "Transparency": 0.35,
@@ -830,9 +830,9 @@
      "Anchored": true,
      "CanCollide": false,
      "Color": [
-      0.78,
-      0.82,
-      0.9
+      0.9,
+      0.55,
+      0.35
      ],
      "Material": "Neon",
      "Transparency": 0.35,
@@ -908,7 +908,7 @@
        0.4
       ],
       "Range": 22,
-      "Brightness": 1.2
+      "Brightness": 1.8
      }
     }
    },
@@ -2108,6 +2108,98 @@
       0.3,
       7.5,
       1.2
+     ]
+    }
+   },
+   "Ceiling": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": true,
+     "Color": [
+      0.32,
+      0.25,
+      0.18
+     ],
+     "Material": "Wood",
+     "Position": [
+      0,
+      12.5,
+      0
+     ],
+     "Size": [
+      62,
+      1,
+      62
+     ]
+    }
+   },
+   "CeilingBeam1": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": true,
+     "Color": [
+      0.28,
+      0.21,
+      0.15
+     ],
+     "Material": "Wood",
+     "Position": [
+      0,
+      12,
+      -15
+     ],
+     "Size": [
+      62,
+      0.8,
+      1.5
+     ]
+    }
+   },
+   "CeilingBeam2": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": true,
+     "Color": [
+      0.28,
+      0.21,
+      0.15
+     ],
+     "Material": "Wood",
+     "Position": [
+      0,
+      12,
+      0
+     ],
+     "Size": [
+      62,
+      0.8,
+      1.5
+     ]
+    }
+   },
+   "CeilingBeam3": {
+    "$className": "Part",
+    "$properties": {
+     "Anchored": true,
+     "CanCollide": true,
+     "Color": [
+      0.28,
+      0.21,
+      0.15
+     ],
+     "Material": "Wood",
+     "Position": [
+      0,
+      12,
+      15
+     ],
+     "Size": [
+      62,
+      0.8,
+      1.5
      ]
     }
    }
