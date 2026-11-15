@@ -77,6 +77,18 @@ local function participantHumanoid(x)
 	return char:FindFirstChildOfClass("Humanoid")
 end
 
+-- Sembunyikan name tag bawaan Roblox di atas kepala (teks putih yang
+-- menumpuk dengan label peran): hanya label peran berwarna yang tampil.
+local function hideNameTag(character)
+	if not character then
+		return
+	end
+	local hum = character:FindFirstChildOfClass("Humanoid")
+	if hum then
+		hum.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+	end
+end
+
 -- Leaderstats ---------------------------------------------------------------
 
 local function setScore(player, value)
@@ -111,8 +123,15 @@ local function setupLeaderstats(player)
 end
 
 Players.PlayerAdded:Connect(setupLeaderstats)
+Players.PlayerAdded:Connect(function(player)
+	player.CharacterAdded:Connect(hideNameTag)
+end)
 for _, player in ipairs(Players:GetPlayers()) do
 	setupLeaderstats(player)
+	if player.Character then
+		hideNameTag(player.Character)
+	end
+	player.CharacterAdded:Connect(hideNameTag)
 end
 Players.PlayerRemoving:Connect(function(player)
 	scores[player] = nil
@@ -183,6 +202,7 @@ local function makeBot(name, colors)
 		end
 	end
 	model.Parent = botFolder
+	hideNameTag(model)
 	local root = model:WaitForChild("HumanoidRootPart")
 	root.CFrame = CFrame.new(math.random(-10, 10), 3, math.random(-10, 10))
 	return model
@@ -207,10 +227,12 @@ botB:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(30, 3, 0)
 
 -- Role visuals ---------------------------------------------------------------
 
--- Label peran di atas kepala: kecil (120x24, TextSize 16), TANPA kotak
+-- Label peran di atas kepala: kecil (76x16, TextSize 10), TANPA kotak
 -- background (BackgroundTransparency 1, outline tebal sebagai gantinya),
--- dan StudsOffset BERBEDA per peran supaya saat ketiga karakter
--- berdekatan labelnya tidak menumpuk di satu garis yang sama.
+-- dan StudsOffset BERBEDA per peran (2.8 / 3.5 / 4.2) supaya saat ketiga
+-- karakter berdekatan labelnya tidak menumpuk di satu garis yang sama.
+-- Name tag bawaan Roblox disembunyikan (hideNameTag) karena teks
+-- putihnya menumpuk dengan label peran di screenshot Dham.
 local function setOverheadLabel(character, text, color, offsetY)
 	if not character then
 		return
@@ -225,7 +247,7 @@ local function setOverheadLabel(character, text, color, offsetY)
 	end
 	local gui = Instance.new("BillboardGui")
 	gui.Name = "RoleLabel"
-	gui.Size = UDim2.fromOffset(120, 24)
+	gui.Size = UDim2.fromOffset(76, 16)
 	gui.StudsOffset = Vector3.new(0, offsetY or 3, 0)
 	gui.AlwaysOnTop = true
 	gui.Parent = head
@@ -235,7 +257,7 @@ local function setOverheadLabel(character, text, color, offsetY)
 	label.Font = Enum.Font.GothamBold
 	label.Text = text
 	label.TextColor3 = color
-	label.TextSize = 16
+	label.TextSize = 10
 	label.TextStrokeTransparency = 0
 	label.Parent = gui
 end
@@ -372,13 +394,14 @@ local function assignRoles()
 
 	for participant, role in pairs(roles) do
 		local char = participantCharacter(participant)
+		hideNameTag(char)
 		if role == "Possessed" then
 			applyPossessedAura(char)
-			setOverheadLabel(char, "KESURUPAN", Color3.fromRGB(255, 70, 70), 3.8)
+			setOverheadLabel(char, "KESURUPAN", Color3.fromRGB(255, 70, 70), 4.2)
 		elseif role == "Reader" then
-			setOverheadLabel(char, "PEMBACA DOA", Color3.fromRGB(255, 220, 90), 3.0)
+			setOverheadLabel(char, "PEMBACA DOA", Color3.fromRGB(255, 220, 90), 2.8)
 		else
-			setOverheadLabel(char, "PENAHAN", Color3.fromRGB(90, 220, 120), 3.4)
+			setOverheadLabel(char, "PENAHAN", Color3.fromRGB(90, 220, 120), 3.5)
 		end
 		local hum = participantHumanoid(participant)
 		if hum then

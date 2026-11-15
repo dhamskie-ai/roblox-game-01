@@ -117,47 +117,49 @@ possessedOverlay.BorderSizePixel = 0
 possessedOverlay.Visible = false
 possessedOverlay.Parent = gui
 
+-- HUD scale (revisi 7): on Dham's phone the Lua GUI renders ~2.5x the
+-- code pixel sizes (measured from his 2048x984 screenshot: a 190x84
+-- button rendered 473x208). The logical viewport is ~753x336, so every
+-- HUD element is kept SMALL in code units. Never trust a "looks fine
+-- on 2048x984" check that assumes 1 code px = 1 screen px.
 -- Top bar: the timer TOP-LEFT (below Roblox's own menu buttons),
--- the role TOP-RIGHT. They can no longer overlap: the timer used to sit
--- centered and ran into the role label on a phone screen.
--- Status + escape warning sit TOP-CENTER, clear of both corners.
+-- the role TOP-RIGHT. Status + escape sit LEFT under the timer.
 local timerLabel = newLabel(
 	gui,
 	"Timer",
 	"SIAP-SIAP",
-	UDim2.new(0, 260, 0, 44),
-	UDim2.new(0, 16, 0, 64),
+	UDim2.new(0, 95, 0, 16),
+	UDim2.new(0, 8, 0, 8),
 	Vector2.new(0, 0)
 )
-timerLabel.TextSize = 30
+timerLabel.TextSize = 14
 timerLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local roleLabel = newLabel(
 	gui,
 	"Role",
 	"PERAN: -",
-	UDim2.new(0, 280, 0, 40),
-	UDim2.new(1, -16, 0, 10),
+	UDim2.new(0, 100, 0, 14),
+	UDim2.new(1, -8, 0, 4),
 	Vector2.new(1, 0)
 )
 roleLabel.TextColor3 = GOLD
-roleLabel.TextSize = 26
+roleLabel.TextSize = 13
 roleLabel.TextXAlignment = Enum.TextXAlignment.Right
 
--- Prayer bar + percent: BOTTOM-CENTER with their own space, far from
--- the top bar (the old bar sat under the timer and the percent text
--- got covered by it).
+-- Prayer bar + percent: BOTTOM-CENTER, thin (5px) and short (200px),
+-- above the percent label; part of the compact bottom stack.
 local prayerBarBack = Instance.new("Frame")
 prayerBarBack.Name = "PrayerBarBack"
 prayerBarBack.AnchorPoint = Vector2.new(0.5, 0)
-prayerBarBack.Position = UDim2.new(0.5, 0, 1, -190)
-prayerBarBack.Size = UDim2.fromOffset(320, 24)
+prayerBarBack.Position = UDim2.new(0.5, 0, 1, -50)
+prayerBarBack.Size = UDim2.fromOffset(200, 5)
 prayerBarBack.BackgroundColor3 = Color3.fromRGB(15, 12, 22)
 prayerBarBack.BorderSizePixel = 0
 prayerBarBack.Parent = gui
 
 local prayerBarBackCorner = Instance.new("UICorner")
-prayerBarBackCorner.CornerRadius = UDim.new(0, 12)
+prayerBarBackCorner.CornerRadius = UDim.new(0, 2)
 prayerBarBackCorner.Parent = prayerBarBack
 
 local prayerFill = Instance.new("Frame")
@@ -168,46 +170,47 @@ prayerFill.BorderSizePixel = 0
 prayerFill.Parent = prayerBarBack
 
 local prayerFillCorner = Instance.new("UICorner")
-prayerFillCorner.CornerRadius = UDim.new(0, 12)
+prayerFillCorner.CornerRadius = UDim.new(0, 2)
 prayerFillCorner.Parent = prayerFill
 
 local prayerLabel = newLabel(
 	gui,
 	"Prayer",
 	"DOA  0%",
-	UDim2.new(0, 320, 0, 28),
-	UDim2.new(0.5, 0, 1, -162)
+	UDim2.new(0, 200, 0, 9),
+	UDim2.new(0.5, 0, 1, -43)
 )
 prayerLabel.TextColor3 = GOLD
-prayerLabel.TextSize = 22
+prayerLabel.TextSize = 12
 
 -- Holder stamina bar + label: BOTTOM-CENTER above the prayer bar
--- (label y 736-760, bar y 760-776; prayer bar starts at y 794, so no
--- overlap). Visible only during a round. Shows "LELAH!" in red while
--- the holder rests, so players understand why the possessed got free.
+-- (bottom stack: stamina label, stamina bar, prayer bar, prayer label,
+-- then ONE shared line for the chant line / hint). Visible only during
+-- a round. Shows "LELAH!" in red while the holder rests, so players
+-- understand why the possessed got free.
 local staminaLabel = newLabel(
 	gui,
 	"Stamina",
 	"STAMINA PENAHAN  100%",
-	UDim2.new(0, 320, 0, 24),
-	UDim2.new(0.5, 0, 1, -248)
+	UDim2.new(0, 200, 0, 9),
+	UDim2.new(0.5, 0, 1, -68)
 )
 staminaLabel.TextColor3 = GREEN
-staminaLabel.TextSize = 18
+staminaLabel.TextSize = 11
 staminaLabel.Visible = false
 
 local staminaBarBack = Instance.new("Frame")
 staminaBarBack.Name = "StaminaBarBack"
 staminaBarBack.AnchorPoint = Vector2.new(0.5, 0)
-staminaBarBack.Position = UDim2.new(0.5, 0, 1, -224)
-staminaBarBack.Size = UDim2.fromOffset(320, 16)
+staminaBarBack.Position = UDim2.new(0.5, 0, 1, -57)
+staminaBarBack.Size = UDim2.fromOffset(200, 4)
 staminaBarBack.BackgroundColor3 = Color3.fromRGB(15, 12, 22)
 staminaBarBack.BorderSizePixel = 0
 staminaBarBack.Visible = false
 staminaBarBack.Parent = gui
 
 local staminaBarBackCorner = Instance.new("UICorner")
-staminaBarBackCorner.CornerRadius = UDim.new(0, 8)
+staminaBarBackCorner.CornerRadius = UDim.new(0, 2)
 staminaBarBackCorner.Parent = staminaBarBack
 
 local staminaFill = Instance.new("Frame")
@@ -218,22 +221,20 @@ staminaFill.BorderSizePixel = 0
 staminaFill.Parent = staminaBarBack
 
 local staminaFillCorner = Instance.new("UICorner")
-staminaFillCorner.CornerRadius = UDim.new(0, 8)
+staminaFillCorner.CornerRadius = UDim.new(0, 2)
 staminaFillCorner.Parent = staminaFill
 
--- Held status line, LEFT under the timer (not top-center): top-center is
--- where the characters' overhead labels land when they cluster
--- mid-screen, and the three texts piled up in Dham's screenshot.
--- A dark panel behind the text keeps it readable if a label passes by.
+-- Held status line, LEFT under the timer: small (200x10, TextSize 11)
+-- with a dark panel behind the text to keep it readable.
 local statusLabel = newLabel(
 	gui,
 	"Status",
 	"",
-	UDim2.new(0, 480, 0, 28),
-	UDim2.new(0, 16, 0, 116),
+	UDim2.new(0, 200, 0, 10),
+	UDim2.new(0, 8, 0, 30),
 	Vector2.new(0, 0)
 )
-statusLabel.TextSize = 20
+statusLabel.TextSize = 11
 statusLabel.TextXAlignment = Enum.TextXAlignment.Left
 statusLabel.BackgroundTransparency = 0.3
 statusLabel.BackgroundColor3 = PANEL
@@ -243,12 +244,12 @@ local escapeLabel = newLabel(
 	gui,
 	"Escape",
 	"",
-	UDim2.new(0, 480, 0, 28),
-	UDim2.new(0, 16, 0, 146),
+	UDim2.new(0, 200, 0, 10),
+	UDim2.new(0, 8, 0, 42),
 	Vector2.new(0, 0)
 )
 escapeLabel.TextColor3 = RED
-escapeLabel.TextSize = 20
+escapeLabel.TextSize = 11
 escapeLabel.TextXAlignment = Enum.TextXAlignment.Left
 escapeLabel.BackgroundTransparency = 0.3
 escapeLabel.BackgroundColor3 = PANEL
@@ -259,55 +260,53 @@ local chantLineLabel = newLabel(
 	gui,
 	"ChantLine",
 	"",
-	UDim2.new(0, 640, 0, 30),
-	UDim2.new(0.5, 0, 1, -108)
+	UDim2.new(0, 260, 0, 9),
+	UDim2.new(0.5, 0, 1, -31)
 )
 chantLineLabel.TextColor3 = GOLD
-chantLineLabel.TextSize = 20
+chantLineLabel.TextSize = 11
 chantLineLabel.Visible = false
 
 -- Chant button: hold it (touch or mouse) to read the doa.
 -- Only visible while this player is the Reader in a round.
--- Lifted 140px off the bottom so the mobile thumbstick (which pops up
--- at the bottom corner) does not cover it.
+-- Small (72x28) at the lower right, ABOVE the mobile jump button
+-- (jump button sits at the bottom-right corner).
 local chantButton = Instance.new("TextButton")
 chantButton.Name = "ChantButton"
 chantButton.AnchorPoint = Vector2.new(1, 1)
-chantButton.Position = UDim2.new(1, -20, 1, -140)
-chantButton.Size = UDim2.fromOffset(190, 84)
+chantButton.Position = UDim2.new(1, -8, 1, -104)
+chantButton.Size = UDim2.fromOffset(72, 28)
 chantButton.BackgroundColor3 = PURPLE
 chantButton.Font = Enum.Font.GothamBold
 chantButton.Text = "TAHAN:\nBACA DOA"
 chantButton.TextColor3 = WHITE
-chantButton.TextSize = 24
+chantButton.TextSize = 13
 chantButton.Visible = false
 chantButton.Parent = gui
 
 local chantButtonCorner = Instance.new("UICorner")
-chantButtonCorner.CornerRadius = UDim.new(0, 16)
+chantButtonCorner.CornerRadius = UDim.new(0, 8)
 chantButtonCorner.Parent = chantButton
 
 local hintLabel = newLabel(
 	gui,
 	"Hint",
 	"Tahan BACA DOA saat kesurupan ditahan & kamu dekat",
-	UDim2.new(0, 640, 0, 28),
-	UDim2.new(0.5, 0, 1, -40)
+	UDim2.new(0, 260, 0, 9),
+	UDim2.new(0.5, 0, 1, -31)
 )
-hintLabel.TextSize = 18
+hintLabel.TextSize = 10
 hintLabel.TextTransparency = 0.15
 
 -- Start screen: title, the rules in Dham's own words, and the countdown.
 -- Shown during the lobby (Intermission); hidden once the round starts.
--- 480x490, centered at (0.5, 0.45): on a 2048x984 phone screen it spans
--- x 784-1264, y 198-688 — clear of the timer (x 16-276), role (top
--- right), status/escape (x 16-496, y 116-174), prayer bar (y 794-818),
--- chant line (y 876-906) and the hint line (y 944-972).
+-- 280x220 (was 480x490: it overflowed Dham's phone screen, the MULAI
+-- button was cut off at the bottom). Same content, smaller text.
 local startFrame = Instance.new("Frame")
 startFrame.Name = "StartScreen"
 startFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 startFrame.Position = UDim2.fromScale(0.5, 0.45)
-startFrame.Size = UDim2.fromOffset(480, 490)
+startFrame.Size = UDim2.fromOffset(280, 220)
 startFrame.BackgroundColor3 = PANEL
 startFrame.BackgroundTransparency = 0.1
 startFrame.BorderSizePixel = 0
@@ -321,21 +320,21 @@ local titleLabel = newLabel(
 	startFrame,
 	"Title",
 	"KESURUPAN\nUSIR IBLIS",
-	UDim2.new(1, 0, 0, 76),
-	UDim2.new(0.5, 0, 0, 14)
+	UDim2.new(1, 0, 0, 36),
+	UDim2.new(0.5, 0, 0, 6)
 )
 titleLabel.TextColor3 = PURPLE
-titleLabel.TextSize = 34
+titleLabel.TextSize = 15
 
 local caraMainLabel = newLabel(
 	startFrame,
 	"CaraMain",
 	"CARA MAIN",
-	UDim2.new(1, 0, 0, 28),
-	UDim2.new(0.5, 0, 0, 92)
+	UDim2.new(1, 0, 0, 16),
+	UDim2.new(0.5, 0, 0, 44)
 )
 caraMainLabel.TextColor3 = GOLD
-caraMainLabel.TextSize = 22
+caraMainLabel.TextSize = 11
 
 -- Dham's rules, verbatim. ~10 wrapped lines at TextSize 20 in 448px
 -- (3 + blank + 3 + blank + 2 lines), 252px tall, top-aligned, left-aligned.
@@ -343,10 +342,10 @@ local rulesLabel = newLabel(
 	startFrame,
 	"Rules",
 	"KESURUPAN: Kabur membawa raga yang sedang kesurupan. Kalau iblis berhasil membawa raga pergi, IBLIS MENANG.\n\nTIM PENYADAR (Pembaca Doa + Penahan): Tahan yang kesurupan, baca doa sampai bar penuh. Iblis pergi, TIM MENANG.\n\nPENAHAN: hanya bisa menahan 5 detik, lalu istirahat 3 detik.",
-	UDim2.new(1, -32, 0, 252),
-	UDim2.new(0.5, 0, 0, 124)
+	UDim2.new(1, -16, 0, 104),
+	UDim2.new(0.5, 0, 0, 62)
 )
-rulesLabel.TextSize = 20
+rulesLabel.TextSize = 10
 rulesLabel.TextWrapped = true
 rulesLabel.TextXAlignment = Enum.TextXAlignment.Left
 rulesLabel.TextYAlignment = Enum.TextYAlignment.Top
@@ -354,13 +353,13 @@ rulesLabel.TextYAlignment = Enum.TextYAlignment.Top
 local startButton = Instance.new("TextButton")
 startButton.Name = "StartButton"
 startButton.AnchorPoint = Vector2.new(0.5, 0)
-startButton.Position = UDim2.new(0.5, 0, 0, 388)
-startButton.Size = UDim2.fromOffset(180, 52)
+startButton.Position = UDim2.new(0.5, 0, 0, 174)
+startButton.Size = UDim2.fromOffset(90, 26)
 startButton.BackgroundColor3 = PURPLE
 startButton.Font = Enum.Font.GothamBold
 startButton.Text = "MULAI"
 startButton.TextColor3 = WHITE
-startButton.TextSize = 26
+startButton.TextSize = 12
 startButton.Parent = startFrame
 
 local startButtonCorner = Instance.new("UICorner")
@@ -371,18 +370,18 @@ local countdownLabel = newLabel(
 	startFrame,
 	"Countdown",
 	"Ronde mulai...",
-	UDim2.new(1, 0, 0, 30),
-	UDim2.new(0.5, 0, 0, 446)
+	UDim2.new(1, 0, 0, 14),
+	UDim2.new(0.5, 0, 0, 204)
 )
 countdownLabel.TextColor3 = GOLD
-countdownLabel.TextSize = 20
+countdownLabel.TextSize = 10
 
 -- End screen: the result, your own score, and the wait for the next round.
 local endFrame = Instance.new("Frame")
 endFrame.Name = "EndScreen"
 endFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 endFrame.Position = UDim2.fromScale(0.5, 0.45)
-endFrame.Size = UDim2.fromOffset(480, 210)
+endFrame.Size = UDim2.fromOffset(280, 84)
 endFrame.BackgroundColor3 = PANEL
 endFrame.BackgroundTransparency = 0.1
 endFrame.BorderSizePixel = 0
@@ -397,29 +396,29 @@ local endTitle = newLabel(
 	endFrame,
 	"Title",
 	"",
-	UDim2.new(1, 0, 0, 52),
-	UDim2.new(0.5, 0, 0, 14)
+	UDim2.new(1, 0, 0, 26),
+	UDim2.new(0.5, 0, 0, 7)
 )
 endTitle.TextColor3 = GOLD
-endTitle.TextSize = 34
+endTitle.TextSize = 17
 
 local yourScoreLabel = newLabel(
 	endFrame,
 	"YourScore",
 	"",
-	UDim2.new(1, -32, 0, 36),
-	UDim2.new(0.5, 0, 0, 74)
+	UDim2.new(1, -16, 0, 18),
+	UDim2.new(0.5, 0, 0, 37)
 )
-yourScoreLabel.TextSize = 22
+yourScoreLabel.TextSize = 11
 
 local nextLabel = newLabel(
 	endFrame,
 	"Next",
 	"Ronde berikutnya segera...",
-	UDim2.new(1, 0, 0, 30),
-	UDim2.new(0.5, 0, 0, 120)
+	UDim2.new(1, 0, 0, 15),
+	UDim2.new(0.5, 0, 0, 60)
 )
-nextLabel.TextSize = 18
+nextLabel.TextSize = 10
 nextLabel.TextTransparency = 0.2
 
 -- Chant input ------------------------------------------------------------------
@@ -433,6 +432,7 @@ local function setChanting(value)
 	chantButton.Text = value and "MEMBACA\nDOA..." or "TAHAN:\nBACA DOA"
 	chantButton.BackgroundColor3 = value and GREEN or PURPLE
 	chantLineLabel.Visible = value
+	hintLabel.Visible = not value
 	updateChantSound()
 	if value then
 		chantLineLabel.Text = Config.CHANT_LINES[chantLineIndex]
