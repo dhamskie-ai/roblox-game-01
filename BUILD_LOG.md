@@ -432,3 +432,78 @@ berdekatan. Arahan Dham: "bikin kaya di dalam ruangan".
   creator SHAMSIE665, updated 20:02:50 WIB; playability
   GuestProhibited (publik, tamu tanpa login tidak bisa main — normal)
   — experience tetap Public.
+
+## Revisi 5 — rumah 3 ruangan + bot pathfinding (15 Nov 2026)
+
+Alasan: Dham — "tempatnya kenapa masih sama di situ situ terus"
+(permintaan: "iyaaa" saat ditawari rumah beberapa ruangan). Arena
+sebelumnya cuma satu ruangan 60×60.
+
+### Denah baru (`default.project.json`)
+Rumah 90×60 (X -45..45, Z -30..30), tiga ruangan berdampingan
+sepanjang sumbu X, dihubungkan pintu lebar 8 (Z -4..4, tinggi 7,
+tanpa daun pintu) di dinding pemisah x=-15 dan x=+15:
+
+- **Kamar tidur** (x -45..-15): kasur tua + bantal, lemari, jam kakek,
+  lukisan, jendela barat baru + tirai, sarang laba-laba.
+- **Ruang tamu** (x -15..+15, tengah): lingkaran ritual + rune (tetap
+  di tengah), lampu gantung, cermin retak, 2 jendela utara + tirai,
+  sofa usang baru, lilin 4 sudut.
+- **Dapur** (x +15..+45): meja dapur + 2 panci tua, jendela timur
+  (pindah dari dinding lama) + tirai, jendela selatan baru, lukisan,
+  sarang laba-laba.
+- Langit-langit 92×62 tetap menutup arena — langit TIDAK terlihat.
+  Baseplate 90×2×60; dinding luar/dalam setinggi 12; balok
+  langit-langit diperpanjang ke 92.
+
+### Suasana dipertahankan (revisi 4)
+- Ambient [0.45,0.45,0.52], Brightness 2, ClockTime 18.25 (senja
+  ungu-biru), Fog 80/300, Atmosphere Density 0.12 — TIDAK diubah.
+  Lampu baru tiap ruangan: BedroomLight + KitchenLight (Range 30,
+  Brightness 2.5, warna hangat), menyusul ArenaLight di ruang tamu.
+- Dekor lama yang menempel di dinding luar yang bergeser dipindah:
+  jendela timur + tirai → x=44, lukisan barat/timur → x=∓44,
+  jam kakek → x=-44; Stain1 (tepat di garis dinding x=15) → (8,-15).
+
+### Bot pathfinding (`src/server/init.server.luau`)
+- Bot sebelumnya `hum:MoveTo(target)` lurus — mentok dinding pemisah.
+  Kini `moveBot()` memakai **PathfindingService** (AgentRadius 2,
+  AgentHeight 5, AgentCanJump false): hitung path lewat pintu,
+  ikuti waypoint satu per satu; fallback MoveTo lurus bila path
+  gagal dihitung. Recompute bila target bergerak >6 stud (throttle
+  0,75 dtk) atau bot diam ~1,5 dtk (stuck → path dibuang, hitung
+  ulang). Dipakai ketiga peran bot (kesurupan, penahan, pembaca)
+  dan saat wandering di lobby.
+- Titik acak bot kini di SELURUH rumah (`Config.ARENA_X_HALF = 43`,
+  `ARENA_Z_HALF = 26`, menggantikan `ARENA_HALF = 26`).
+- Spawn tersebar tiap ronde: `scatterParticipants()` di akhir
+  `assignRoles()` — ketiga peserta (pemain + 2 bot) diteleport ke
+  ruangan BERBEDA (urutan ruangan diacak tiap ronde), offset acak
+  ±8 (X) / ±10 (Z) dari pusat ruangan (ruang tamu 0, kamar -30,
+  dapur +30). Bot juga mulai di kamar/dapur sejak server start.
+- Orbit kelelawar diperkecil (radius 10/12/14) supaya tetap di ruang
+  tamu, tidak menembus dinding pemisah; 2 fog emitter yang tadinya
+  tepat di garis dinding (x=±15) dipindah ke kamar/dapur.
+
+### Gameplay TIDAK diubah
+Peran acak, Pembaca Doa/Penahan/Kesurupan, bar doa, escape meter
+12 dtk, ronde 60 dtk, lobby 10 dtk, hasil 6 dtk, skor/leaderstats,
+GUI, teks doa — semua sama.
+
+### Verifikasi
+- `./bin/rojo build` (Rojo 7.7.1) — **SUKSES**, `game.rbxl` **24.508
+  byte** (sebelumnya 21.861). Cek keseimbangan blok Luau (strip
+  komentar/string): tambahan server +16 opener / +16 end (seimbang);
+  parens dan braces seimbang di ketiga file. Tidak ada compiler Luau
+  di VM; verifikasi runtime penuh menunggu Dham main.
+- `main.ts`/`check`/`submit` TIDAK dijalankan di run ini (menunggu
+  screenshot baru dari game revisi 5 + submit ulang sebelum deadline
+  16 Nov 01:00 WIB).
+- Commit `a767123` ("revisi 5: rumah 3 ruangan + bot pathfinding"),
+  push ke main OK.
+- **Publish — SELESAI 15 Nov ~20:11 WIB:** `roblox.py publish 9874149559
+  93903442181463 game.rbxl` → **HTTP 200, versionNumber 8** (sebelumnya 7).
+  Verifikasi: games API mengembalikan nama asli "Tempat SHAMSIE665",
+  creator SHAMSIE665, updated 20:11:26 WIB; playability
+  GuestProhibited (publik, tamu tanpa login tidak bisa main — normal)
+  — experience tetap Public.
